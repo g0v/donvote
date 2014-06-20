@@ -1,0 +1,22 @@
+
+<div ng-show="tab==2">
+  <div id="proposal-list" ng-controller="ctrl.proposal">
+    <div ng-repeat="p in list" ng-click="updatePropCur(p)" class="proposal">
+      <div class="ib">
+        <div class="stick">
+          <div class="label label-success">已投</div>
+        </div>
+        <div class="thumb">
+          <div class="desc">{{p.desc}}</div>
+          <div class="name">{{p.name}}</div>
+        </div>
+        <div class="name">{{p.name}}</div>
+        <div class="desc">{{p.desc}}</div>
+        <div class="detail">
+          <div class="label label-danger">投票中</div>
+          <div class="label label-warning">投票率50%</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
