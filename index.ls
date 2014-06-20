@@ -5,6 +5,8 @@ ctrl.simpletab = ($scope) ->
   $scope.active = (a,b) -> if a==b => \active else ""
 
 ctrl.simplebase = ($scope, $location, $interval, DataService) ->
+  # temporarily - go voting directly
+  $location.search \proposal, \-JPsjbz1hR7V5N2p_eMv
   angular.element \body .scope!tab = 2
   angular.element \#current-proposal .scope!cur = ([[k,v] for k,v of DataService.proposal.ref]0 or [])1 or {}
   $scope.proposal = do

@@ -12,6 +12,7 @@ ctrl.simpletab = function($scope){
 };
 ctrl.simplebase = function($scope, $location, $interval, DataService){
   var k, v, s, updateProgress;
+  $location.search('proposal', '-JPsjbz1hR7V5N2p_eMv');
   angular.element('body').scope().tab = 2;
   angular.element('#current-proposal').scope().cur = ((function(){
     var ref$, results$ = [];

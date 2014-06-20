@@ -28,8 +28,8 @@ html(lang="en")
         .navbar-header
           a.navbar-brand(href="#") 動民主0.5
         ul.nav.navbar-nav
-          li(ng-class="active(tab, 1)"): a(href="#",ng-click="tab=1") 發起新提案
-          li(ng-class="active(tab, 2)"): a(href="#",ng-click="tab=2") 提案列表
+          li(ng-class="active(tab, 1)",ng-show="user.username=='zbryikt'"): a(href="#",ng-click="tab=1") 發起新提案
+          li(ng-class="active(tab, 2)",ng-show="user.username=='zbryikt'"): a(href="#",ng-click="tab=2") 提案列表
           li(ng-class="active(tab, 3)",ng-show="propCur.name"): a(href="#",ng-click="tab=3") {{propCur.name}}
         ul.nav.navbar-nav.navbar-right(ng-controller="ctrl.user")
           li: a(href="#",ng-show="!user",ng-click="login()") 登入
