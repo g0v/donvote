@@ -38,7 +38,8 @@ div(ng-show="tab==3")
                     | {{propCur.end|date:'yyyy/MM/dd HH:mm'}} 止
                   span(ng-show="!propCur.end") , 截止時間未定
           .row
-            .col-sm-4
+            .col-sm-4(ng-class="{'disabled':propCur.progress<2 || propCur.progress>3}")
+              .mask
               h4 所有方案
               div
                 .choice(ng-repeat="p in propCur.link['choice']|value",ng-click="pick(propCur, p.id)")
@@ -59,7 +60,7 @@ div(ng-show="tab==3")
                  .btn.btn-primary(ng-controller="ctrl.user",ng-click="login()") 想要參與決策嗎？立刻登入
             .col-sm-4
               h4 表決狀態
-                svg.choice-stat(width="100%",height="160px",viewBox="0 0 200 160",preserveAspectRatio="xMidYMid")
+                svg.choice-stat(width="100%",height="160px",viewBox="0 0 200 160",preserveAspectRatio="xMinYMid")
                   g
                   g: g(ng-repeat="(k,v) in cs.d")
                     rect(x="0",ng-attr-y="{{$index * 20}}",ng-attr-width="{{v.c * 10}}",height="15",ng-attr-fill="{{color(v.r.id)}}")
