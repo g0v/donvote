@@ -366,13 +366,13 @@
                           <div ng-controller="ctrl.user" ng-click="login()" class="btn btn-primary">想要參與決策嗎？立刻登入</div>
                         </div>
                       </div>
-                      <div class="col-sm-4">
-                        <h4>表決狀態
+                      <div ng-controller="ctrl.blah" class="col-sm-4">
+                        <h4>表決狀態 {{max}}
                           <svg width="100%" height="160px" viewBox="0 0 200 160" preserveAspectRatio="xMinYMid" class="choice-stat">
                             <g></g>
                             <g>
                               <g ng-repeat="(k,v) in cs.d">
-                                <rect x="0" ng-attr-y="{{$index * 20}}" ng-attr-width="{{v.c * 10}}" height="15" ng-attr-fill="{{color(v.r.id)}}"></rect>
+                                <rect x="0" ng-attr-y="{{$index * 20}}" ng-attr-width="{{ 200 * ( v.c * 10 ) / ( max * 10 )}}" height="15" ng-attr-fill="{{color(v.r.id)}}"></rect>
                                 <text ng-attr-x="{{v.c * 10 + 5}}" ng-attr-y="{{$index * 20 + 11}}">{{v.r.v.name}} ( {{ v.c}} )</text>
                               </g>
                             </g>

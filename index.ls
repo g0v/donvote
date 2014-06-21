@@ -1,5 +1,11 @@
 angular.module \simple, <[ui.bootstrap.datetimepicker main]>
 
+ctrl.blah = ($scope) ->
+  $scope.max = 1
+  $scope.$watch '$parent.cs' -> 
+    $scope.max = Math.max.apply null, [parseInt(v.c) for k,v of it.d]
+    if $scope.max <= 0  => $scope.max = 1
+
 ctrl.simpletab = ($scope) ->
   $scope.tab = 2
   $scope.active = (a,b) -> if a==b => \active else ""

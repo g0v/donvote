@@ -58,12 +58,12 @@ div(ng-show="tab==3")
                //-.btn.btn-success(style="margin-top:10px") 深入了解各個方案的內涵
                div(ng-show="!user.id")
                  .btn.btn-primary(ng-controller="ctrl.user",ng-click="login()") 想要參與決策嗎？立刻登入
-            .col-sm-4
-              h4 表決狀態
+            .col-sm-4(ng-controller="ctrl.blah")
+              h4 表決狀態 {{max}}
                 svg.choice-stat(width="100%",height="160px",viewBox="0 0 200 160",preserveAspectRatio="xMinYMid")
                   g
                   g: g(ng-repeat="(k,v) in cs.d")
-                    rect(x="0",ng-attr-y="{{$index * 20}}",ng-attr-width="{{v.c * 10}}",height="15",ng-attr-fill="{{color(v.r.id)}}")
+                    rect(x="0",ng-attr-y="{{$index * 20}}",ng-attr-width="{{ 200 * ( v.c * 10 ) / ( max * 10 )}}",height="15",ng-attr-fill="{{color(v.r.id)}}")
                     text(ng-attr-x="{{v.c * 10 + 5}}",ng-attr-y="{{$index * 20 + 11}}") {{v.r.v.name}} ( {{ v.c}} )
 
       .panel.panel-default
