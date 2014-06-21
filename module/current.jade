@@ -65,7 +65,7 @@ div(ng-show="tab==3")
                   g
                   g: g(ng-repeat="(k,v) in cs.d")
                     rect(x="0",ng-attr-y="{{$index * 20}}",ng-attr-width="{{ 200 * ( v.c * 10 ) / ( max * 10 )}}",height="15",ng-attr-fill="{{color(v.r.id)}}")
-                    text(ng-attr-x="{{v.c * 10 + 5}}",ng-attr-y="{{$index * 20 + 11}}") {{v.r.v.name}} ( {{ v.c}} )
+                    text(ng-attr-x="{{200 * ( v.c * 10 ) / ( max * 10 ) + 5}}",ng-attr-y="{{$index * 20 + 11}}") {{v.r.v.name}} ( {{ v.c}} )
 
       .panel.panel-default
         .panel-heading
