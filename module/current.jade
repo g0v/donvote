@@ -45,7 +45,8 @@ div(ng-show="tab==3")
                 .choice(ng-repeat="p in propCur.link['choice']|value",ng-click="pick(propCur, p.id)")
                   | {{p.v.name}}
                   i.glyphicon.glyphicon-ok(ng-show="isPicked(propCur,p.id)")
-            .col-sm-4
+            .col-sm-4(ng-class="{'disabled':propCur.progress<2 || propCur.progress>3}")
+              .mask
                h4 你的選擇
                h5(ng-show="propCur.config.method==3")
                  | 你選擇的順序將決定各個方案的名次

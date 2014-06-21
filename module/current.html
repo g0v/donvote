@@ -33,16 +33,18 @@
                   <div ng-repeat="p in propCur.link['choice']|value" ng-click="pick(propCur, p.id)" class="choice">{{p.v.name}}<i ng-show="isPicked(propCur,p.id)" class="glyphicon glyphicon-ok"></i></div>
                 </div>
               </div>
-              <div class="col-sm-4">
-                <h4>你的選擇</h4>
-                <h5 ng-show="propCur.config.method==3">你選擇的順序將決定各個方案的名次</h5>{{picks}}
-                <div ng-show="user.id">
-                  <div ng-repeat="p in picked(propCur,true)" ng-click="pick(propCur, p.id)" class="choice">{{p.v.name}}
-                    <div ng-show="propCur.config.method==3" class="rank">{{$index + 1}}</div>
+              <div ng-class="{'disabled':propCur.progress&lt;2 || propCur.progress&gt;3}" class="col-sm-4">
+                <div class="mask">
+                  <h4>你的選擇</h4>
+                  <h5 ng-show="propCur.config.method==3">你選擇的順序將決定各個方案的名次</h5>{{picks}}
+                  <div ng-show="user.id">
+                    <div ng-repeat="p in picked(propCur,true)" ng-click="pick(propCur, p.id)" class="choice">{{p.v.name}}
+                      <div ng-show="propCur.config.method==3" class="rank">{{$index + 1}}</div>
+                    </div>
                   </div>
-                </div>
-                <div ng-show="!user.id">
-                  <div ng-controller="ctrl.user" ng-click="login()" class="btn btn-primary">想要參與決策嗎？立刻登入</div>
+                  <div ng-show="!user.id">
+                    <div ng-controller="ctrl.user" ng-click="login()" class="btn btn-primary">想要參與決策嗎？立刻登入</div>
+                  </div>
                 </div>
               </div>
               <div ng-controller="ctrl.blah" class="col-sm-4">
