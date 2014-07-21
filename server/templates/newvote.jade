@@ -1,0 +1,368 @@
+{% load angularjs %}
+script(type="text/javascript",src="/s/js/newvote.js")
+form#vote-new(ng-controller="newvote")
+  h2 建立投票案
+  hr
+  .row
+    .col-sm-3.text-right
+      h3 基本設定
+  .row
+    .col-sm-3.text-right
+      h4 投票名稱
+    .col-sm-9
+      input.form-control.input-lg(type="text",name="name",ng-model="vote.name",placeholder="例如：丹大野生動物保護區建立迪士尼樂園之表决")
+  br
+  .row
+    .col-sm-3.text-right
+      h4 詳細描述
+    .col-sm-9
+      textarea.form-control(name="desc",ng-model="vote.desc",style="min-height:100px",placeholder="請在此說明舉辦投票的原由、內容、目的、受眾等等細節。")
+  .hr-dashed
+  .row.opt.active(ng-class="{'active':!custom.time}")
+    .col-sm-3.text-right
+      h4 投票時間
+      a(ng-click="custom.time = true")
+        i.glyphicon.glyphicon-cog
+        |  自訂..
+    .col-sm-9.quick-btns
+      choices(ng-model="quick.time",btn-type="btn-default btn-lg")
+        choice(value="1",fallback,active)
+          .title 彈性時間
+          .desc 即刻開始，手動結束
+        choice(value="2")
+          .title 需要討論
+          .desc 開始與結束時間未定
+        choice(value="3")
+          .title 預設間隔
+          .desc 即刻開始，為期一天
+  .opt.bl-orange(ng-class="{'active':custom.time}")
+    .row
+      .col-sm-3.text-right
+        h3 時間設定
+      .col-sm-9
+        h3
+          a.btn.btn-link(ng-click="custom.time=false") 
+            | ... 或者回到簡易設定
+            i.glyphicon.glyphicon.glyphicon-arrow-right
+      .col-sm-3.text-right
+        h4 開始時間
+      .col-sm-9
+        choices(ng-model="vote.startmethod",btn-type="btn-default")
+          choice(value="1",default,active) 手動開始
+          choice(value="2") 指定時間
+          choice(value="3") 條件開始
+        .br-more
+        .opt.active(ng-class="{'active':vote.startmethod[1]}")
+          .panel.panel-default
+            .panel-heading 手動開始投票
+            .panel-body
+              | 在此設定下，你必須手動按下開始投票的按鈕，投票才會正式開始。
+              br
+              | 適合用在投票規格尚不確定的情況。
+        .opt(ng-class="{'active':vote.startmethod[2]}")
+          .panel.panel-default
+            .panel-heading 指定開始時間
+            .panel-body
+              | 在此設定下，你可以明確指定投票開始的時間，時間一到投票即會自動開始。
+              br
+              | 適合用在投票時間明確的情況。
+              .br-more
+              .form-group
+                label 開始時間
+                input.form-control(name="starttime",ng-model="vote.starttime",type="date")
+        .opt(ng-class="{'active':vote.startmethod[3]}")
+          .panel.panel-default
+            .panel-heading 設定開始條件
+            .panel-body
+              | 在此設定下，唯有指定的條件滿足時，才會觸發投票開始的倒數。
+              br
+              | 適合用在選項還不完整或需要群眾提供意見的情況。
+              .br-more
+              .checkbox.checkbox-higher
+                label
+                  input(type="checkbox",ng-model="vote.needQuality")
+                  | 有效方案占全部的 {{'vote.planQualifiedRate'|aj}}% 以上
+                  input.form-control.input-sm.right-inline(name="planQualifiedRate",ng-model="vote.planQualifiedRate",type="number",ng-disabled="!vote.needQuality")
+              .checkbox.checkbox-higher
+                label
+                  input(type="checkbox",ng-model="vote.needKarmaRate")
+                  | 方案需總投票人數的 {{'vote.planKarmaRate'|aj}}% 以上認同方為有效
+                  input.form-control.input-sm.right-inline(name="planKarmaRate",ng-model="vote.planKarmaRate",type="number",ng-disabled="!vote.needKarmaRate")
+              .checkbox.checkbox-higher
+                label
+                  input(type="checkbox",ng-model="vote.needKarmaCount")
+                  | 方案需 {{'vote.planKarmaCount'|aj}} 人以上認同方為有效
+                  input.form-control.input-sm.right-inline(name="planKarmaCount",ng-model="vote.planKarmaCount",type="number",ng-disabled="!vote.needKarmaCount")
+              .checkbox.checkbox-higher
+                label
+                  input(type="checkbox",ng-model="vote.needAgree")
+                  | 同意開始的投票人比例超過 {{'vote.agreeRate'|aj}}%
+                  input.form-control.input-sm.right-inline(name="agreeRate",ng-model="vote.agreeRate",type="number",ng-disabled="!vote.needAgree")
+              .checkbox.checkbox-higher
+                label
+                  input(type="checkbox",ng-model="vote.needCloseQuestion")
+                  | 問題回答率超過 {{'vote.closeQuestionRate'|aj}}%
+                  input.form-control.input-sm.right-inline(name="closeQuestionRate",ng-model="vote.closeQuestionRate",type="number",ng-disabled="!vote.needCloseQuestion")
+              .form-group
+                label 條件達成後，開始前的倒數時間
+                input.form-control(name="autoStartCountdown",type="number",ng-model="vote.autoStartCountdown")
+    .row
+      .col-sm-3 
+      .col-sm-9: .hr-dashed
+    .row
+      .col-sm-3.text-right
+        h4 結束時間
+      .col-sm-9
+        choices(ng-model="vote.endmethod",btn-type="btn-default")
+          choice(value="1",default,active) 手動結束
+          choice(value="2") 指定時間
+          choice(value="3") 條件結束
+        .br-more
+        .opt.active(ng-class="{'active':vote.endmethod[1]}")
+          .panel.panel-default
+            .panel-heading 手動結束投票
+            .panel-body
+              | 在此設定下，你必須手動按下結束投票的按鈕，投票才會正式結束。 
+              br
+              | 適合用在投票時程不固定的情況。
+        .opt(ng-class="{'active':vote.endmethod[2]}")
+          .panel.panel-default
+            .panel-heading 指定結束時間
+            .panel-body
+              | 在此設定下，你可以明確指定投票結束的時間，時間一到投票即會自動結束。你可以擇一設定：明確指定結束的時間點，或是設定投票開始後的時間長度。
+              br
+              | 適合用在投票時間明確的情況。
+              .br-more
+              .radio
+                label
+                  input(type="radio")
+                  .form-group
+                    label 指定結束時間
+                    input.form-control(type="text",ng-model="vote.endtime")
+              .radio
+                label
+                  input(type="radio")
+                  .form-group
+                    label 指定投票長度
+                    input.form-control(type="text",ng-model="vote.endtime")
+        .opt(ng-class="{'active':vote.endmethod[3]}")
+          .panel.panel-default
+            .panel-heading 設定結束條件
+            .panel-body
+              | 在此設定下，唯有指定的條件滿足時，才會觸發投票開始的倒數。 
+              br
+              | 適合用在投票案需要滿足一定條件才成立的情況。
+              .br-more
+              .checkbox
+                label
+                  input(type="checkbox")
+                  | 投票率高於 50 %
+              .form-group
+                label 結束前倒數
+                input.form-control(type="text")
+
+  br
+  .row.opt.active(ng-class="{'active':!custom.plan}")
+    .col-sm-3.text-right
+      h4 方案類型
+      a(ng-click="custom.plan=true") 
+        i.glyphicon.glyphicon-cog
+        |  自訂..
+    .col-sm-9.quick-btns
+      choices(ng-model="quick.plan",btn-type="btn-default btn-lg")
+        choice(value="1",fallback,active)
+          .title 正反兩方
+          .desc 選項包含贊同與反對
+        choice(value="2")
+          .title 三種選擇
+          .desc 贊同、反對以及廢票
+        choice(value="3")
+          .title 五星評分
+          .desc 以星等表達支持程度
+
+  .opt.bl-yellow(ng-class="{'active':custom.plan}")
+    .row
+      .col-sm-3.text-right
+        h3 方案設定
+      .col-sm-9
+        h3
+          a.btn.btn-link(ng-click="custom.plan=false") 
+            | ... 或者回到簡易設定
+            i.glyphicon.glyphicon.glyphicon-arrow-right
+
+    .row
+      .col-sm-3.text-right
+        h4 投票形式
+      .col-sm-9
+        .btn-group
+          .btn.btn-default 單選
+          .btn.btn-default 多選
+          .btn.btn-default 排名
+          .btn.btn-default 給分
+    .row
+      .col-sm-3.text-right
+        h4 品質控制
+      .col-sm-9
+        .checkbox
+          label
+            input(type="checkbox")
+            | 夠多贊同，方案才生效。門檻: 10人連署贊同
+      .col-sm-3.text-right
+        h4 多選票數
+      .col-sm-9
+        .form-group
+          input.form-control(type="number")
+      .col-sm-3.text-right
+        h4 排名演算法
+      .col-sm-9
+        select.form-control
+          option Schulze Method
+          option Ranked Pairs
+          option Copeland
+          option Kemeny-Young
+          option Nanson
+          option Baldwin
+    .row
+      .col-sm-3.text-right
+        h4 方案列表
+      .col-sm-9
+        .btn.btn-default 方案一
+        .btn.btn-default 方案二
+        .btn.btn-default 方案三
+    .row
+      .col-sm-3.text-right
+        h3 新增方案
+    .row
+      .col-sm-3.text-right
+        h4 方案名稱
+      .col-sm-9
+        .form-group
+          input.form-control(type="text")
+      .col-sm-3.text-right
+        h4 方案描述
+      .col-sm-9
+        .form-group
+          textarea.form-control
+      .col-sm-3
+      .col-sm-9
+        .btn.btn-primary.btn-rad.btn-block 新增
+  br
+  .opt.active(ng-class="{'active':!custom.perm}")
+    .row
+      .col-sm-3.text-right
+        h3 權限設定
+    .row
+      .col-sm-3.text-right
+        h4 投票權
+        a(ng-click="custom.perm=true") 
+          i.glyphicon.glyphicon-cog
+          |  自訂..
+      .col-sm-9.quick-btns
+        choices(ng-model="quick.perm",btn-type="btn-default btn-lg")
+          choice(value="1",fallback,active)
+            .title 所有用戶
+            .desc 全站使用者都可投票
+          choice(value="2")
+            .title 我的朋友
+            .desc 只有朋友們可以投票
+          choice(value="3")
+            .title 邀請投票
+            .desc 需受到邀請才可投票
+  .opt.bl-green(ng-class="{'active':custom.perm}")
+    .row
+      .col-sm-3.text-right
+        h3 權限設定
+      .col-sm-9
+        h3
+          a.btn.btn-link(ng-click="custom.perm=false")
+            | ... 或者回到簡易設定
+            i.glyphicon.glyphicon.glyphicon-arrow-right
+    .row
+      .col-sm-3.text-right
+        h4 擁有者
+      .col-sm-9
+        input.form-control
+    .row
+      .col-sm-3.text-right
+        h4 管理員
+      .col-sm-9
+        input.form-control
+    .row
+      .col-sm-3.text-right
+        h4 投票權
+      .col-sm-9
+        input.form-control
+    .row
+      .col-sm-3.text-right
+        h4 閱覽權
+      .col-sm-9
+        input.form-control
+  .row(ng-click="custom.adv=!custom.adv",style="cursor:pointer")
+    .col-sm-3.text-right
+      h3 進階設定
+    .col-sm-9
+      h3: i.glyphicon.glyphicon-chevron-right.deg0(ng-class="{'deg90':custom.adv}")
+  .opt.bl-blue(ng-class="{'active':custom.adv}")
+    .row
+      .col-sm-3.text-right
+        h4 投票是否記名
+      .col-sm-9
+        .radio
+          label
+            input(type="radio")
+            | 記名投票
+        .radio
+          label
+            input(type="radio")
+            | 不記名投票
+        .checkbox
+          label
+            input(type="checkbox")
+            | 沒登入也可以投票
+      .col-sm-3.text-right
+        h4 投票有效性
+      .col-sm-9
+        .checkbox
+          label
+            input(type="checkbox")
+            | 允許廢票
+        .checkbox
+          label
+            input(type="checkbox")
+            | 廢票過多時投票作廢 - 廢票率門檻: 50%
+        .checkbox
+          label
+            input(type="checkbox")
+            | 票數不足時投票作廢 - 投票率門檻: 50%
+        .checkbox
+          label
+            input(type="checkbox")
+            | 得票不足時投票作廢 - 得票率門檻: 30%
+      .col-sm-3.text-right
+        h4 群眾協作
+      .col-sm-9
+        .checkbox
+          label
+            input(type="checkbox")
+            | 開放留言討論
+        .checkbox
+          label
+            input(type="checkbox")
+            | 開放評價系統
+        .checkbox
+          label
+            input(type="checkbox")
+            | 允許複製投票
+        .checkbox
+          label
+            input(type="checkbox")
+            | 投票人可開新方案
+
+  hr
+  .btn.btn-success.btn-lg.btn-block 馬上建立新投票案
+
+  br
+  br
+  br
+  br
+

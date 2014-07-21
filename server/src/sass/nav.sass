@@ -1,0 +1,84 @@
+@import vars
+
+.navbar-bindola
+  background-color: $c4a
+  border-color: $c1b
+  box-shadow: 0 3px 3px $c1c
+  li.sep-left
+    border-left: 1px solid $c1c
+    //padding-left: 10px
+  li.sep-right
+    border-right: 1px solid $c1c
+  .glyphicon
+    vertical-align: text-top
+    color: $c1a
+
+  .count
+    position: absolute
+    top: 50px
+    background: #fff
+    width: 100%
+    border: 1px solid $c1b
+    border-top: none
+    text-align: center
+    color: $c1a
+    font-weight: 900
+    box-shadow: 0 3px 3px $c1c
+
+  .round-icon
+    width: 30px
+    height: 30px
+    line-height: 30px
+    margin: 10px 15px 0
+    border-radius: 50%
+    text-align: center
+    background: $c4a
+    .glyphicon
+      color: $c4b
+      font-size: 16px
+
+  .round-icon.active
+    background: $c4a
+    border: 1px solid $c1c
+    box-shadow: 0 0 5px $c6c
+    text-shadow: 0 1px $c1d
+    .glyphicon
+      color: $c1a
+  .avatar
+    width: 30px
+    height: 30px
+    margin: 10px 0 
+  a
+    color: $c5a
+  .nav-user
+    padding: 0 10px
+    img
+      margin-right: 10px
+  .navbar-header
+    width: 220px
+    height: 50px
+    .navbar-brand
+      position: relative
+      text-align: center
+      padding: 0
+      &:before
+        content: " "
+        display: block
+        width: 0
+        height: 0
+        position: absolute
+        top: 50px
+        left: -10px
+        border-left: 5px solid transparent
+        border-bottom: 5px solid transparent
+        border-right: 5px solid $c1d
+        border-top: 5px solid $c1d
+
+      width: 220px
+      height: 60px
+      position: absolute
+      background: $c1a
+      box-shadow: 0 3px 3px $c1c
+      img
+        width: 200px
+        margin-top: 5px

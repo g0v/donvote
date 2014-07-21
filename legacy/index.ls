@@ -12,7 +12,7 @@ ctrl.simpletab = ($scope) ->
 
 ctrl.simplebase = ($scope, $location, $interval, DataService) ->
   # temporarily - go voting directly
-  $location.search \proposal, \-JPxG58NOOYbNYTZzWTf
+  #$location.search \proposal, \-JPxG58NOOYbNYTZzWTf
   angular.element \body .scope!tab = 2
   angular.element \#current-proposal .scope!cur = ([[k,v] for k,v of DataService.proposal.ref]0 or [])1 or {}
   $scope.proposal = do

@@ -1,0 +1,137 @@
+| {% load angularjs %}
+.item: .ib(style="width:500px")
+  h3 建立提案
+  form(name="newProposalForm",novalidate)
+    .form-group
+      label 提案名稱
+      input.form-control(type="text",name="name",ng-model="name",required)
+    .form-group
+      label 提案描述
+      textarea.form-control(name="desc",ng-model="desc",required)
+    .row
+      .col-sm-5
+        .form-group
+          label 方案名稱
+          input.form-control(type="text",name="name",ng-model="name",required)
+        .form-group
+          label 方案描述
+          textarea.form-control(name="desc",ng-model="desc",required)
+        .form-group
+          .btn.btn-success 新增
+      .col-sm-6
+        .form-group
+          label 方案列表
+          br
+
+    .row
+      .col-sm-9
+        .form-group
+          label 投票方式
+          br
+          choices(ng-model="voteMethod",data-type="array")
+            choice(value="1") 單選
+            choice(value="2") 複選
+            choice(value="3") 排名
+          toggle.btn-primary(ng-model="option.null") 允許廢票
+          toggle.btn-primary(ng-model="option.disclosed") 記名投票
+      .col-sm-3
+        .form-group(ng-show="voteMethod[0]==2")
+          label 複選項目上限
+          input.form-control(type="number",ng-pattern="/^\d+$/")
+
+    .row
+      .col-sm-7
+        .form-group
+          label 開始方式
+          choices(ng-model="startMethod",data-type="array")
+            choice(value="1") 指定時間
+            choice(value="2") 條件達成
+            choice(value="3") 手動開始
+      .col-sm-5
+        .form-group(ng-show="startMethod[0]==1")
+          label 開始時間
+          input.form-control(type="date",name="startdate",ng-model="startdate")
+   .row 
+     .col-sm-5
+        .form-group(ng-show="startMethod[0]==2")
+          label 開始條件
+
+          .checkbox
+            label
+              input(type="checkbox")
+              | 需要充足支持 - 支持率門檻
+              input.form-control.input-sm(ng-model="karmaRate")
+          .checkbox
+            label
+              input(type="checkbox")
+              | 需要夠多提案 - 提案數門檻
+              input.form-control.input-sm(ng-model="karmaRate")
+
+          .checkbox
+            label
+              input(type="checkbox")
+              | 需要充足支持 - 支持率門檻
+              input.form-control.input-sm(ng-model="karmaRate")
+          .checkbox
+            label
+              input(type="checkbox")
+              | 需要夠多提案 - 提案數門檻
+              input.form-control.input-sm(ng-model="karmaRate")
+
+   .row
+     .col-sm-5
+       .form-group
+          choices(ng-model="startcriteria",multi="true")
+            choice(value="1") 充足支持
+            choice(value="2") 夠多提案
+            choice(value="3") 品質達成
+            choice(value="4") 管理群認可
+        .form-group(ng-show="startcriteria[1]")
+          label 支持比例
+          input(type="number",ng-model="karmaCriteria")
+        .form-group(ng-show="startcriteria[2]")
+          label 提案數
+          input(type="number",ng-model="planCriteria")
+        .form-group(ng-show="startcriteria[3]")
+          label 提案支持率
+          input(type="number",ng-model="quality1Criteria")
+        .form-group(ng-show="startcriteria[3]")
+          label 提案超過支持率數
+          input(type="number",ng-model="quality2Criteria")
+        .form-group(ng-show="startcriteria[3]")
+          label 問題解答率
+          input(type="number",ng-model="quality3Criteria")
+        .form-group(ng-show="startcriteria[4]")
+          label 同意率
+          input(type="number",ng-model="adminCriteria")
+        .form-group
+          label 結束方式
+          choices(ng-model="endMethod",data-type="array")
+            choice(value="1") 指定時間
+            choice(value="2") 條件達成
+            choice(value="3") 手動結束
+        .form-group(ng-show="endMethod==1")
+          label 結束時間
+          input(type="date",name="enddate",ng-model="enddate"))
+        .form-group(ng-show="endMethod==2")
+          label 結束條件
+          choices(ng-model="endcriteria")
+            choice(value="1") 投票率
+            choice(value="2",ng-show="otherOption[3]") 廢票率
+
+      .col-sm-5
+
+        .form-group
+          label 其他選項
+          choices(ng-model="otherOption",multi="true",btn-type="btn-list")
+            choice(value="1") 記名投票
+            choice(value="2") 允許匿名
+            choice(value="3") 廢票選項
+            choice(value="4") 有效下限
+            choice(value="5") 投票者可提案
+        .form-group(ng-show="otherOption[4] && otherOption[3]")
+          label 廢票門檻
+          input(type="number",ng-model="failCriteria")
+        .form-group(ng-show="otherOption[4]")
+          label 投票率門檻
+          input(type="number",ng-model="rateCriteria")

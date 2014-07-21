@@ -1,0 +1,19 @@
+| {% extends 'base.jade' %}
+| {% load angularjs %}
+| {% block content-margin %}
+script(type="text/javascript",src="/s/js/new.js")
+#new-vote(ng-controller="newvote")
+  form
+    .form-group
+      label 提案名稱
+      input.form-control(type="text",ng-model="new.name")
+    .form-group
+      label 提案描述
+      textarea.form-control(ng-model="new.desc")
+    .well
+      label 方案
+      .name 方案一
+      .desc 方案描述內容
+    .btn.btn-primary(ng-click="submit()") 送出
+
+| {% endblock %}

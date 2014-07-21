@@ -1,0 +1,76 @@
+@import basic
+
+.opt
+  opacity: 0
+  max-height: 0
+  overflow: hidden
+  @include transition(all 1s)
+.opt.active
+  opacity: 1
+  max-height: 1000px
+  
+#vote-new
+  .btn-lg.active
+    position: relative
+    &:after
+      font-family: 'Glyphicons Halflings'
+      -webkit-font-smoothing: antialiased
+      content: "\e013"
+      display: block
+      position: absolute
+      top: 50%
+      right: 10px
+      margin-top: -10px
+      color: #0b0
+      width: 20px
+      height: 20px
+      line-height: 20px
+      font-size: 12px
+
+  .title
+    font-size: 1.3em
+  .desc
+    font-size: 12px
+  .quick-btns
+    .btn-group
+      width: 100%
+      margin-left: 2%
+    .btn
+      width: 32%
+@media (max-width: 1073px)
+  #vote-new .quick-btns .btn
+    width: 100%
+    &:nth-of-type(1)
+      border-radius: 10px 10px 0 0
+      margin-left: -1px
+    &:last-of-type
+      border-radius: 0 0 10px 10px
+
+.radio-group
+  width: 100%
+  .radio
+    margin: 0
+    margin-left: 40px
+    display: relative
+    line-height: 30px
+    input
+      margin-top: 7px
+    &:before
+      content: ""
+      width: 30px
+      height: 30px
+      display: block
+      background: #fff
+      margin-left: -65px
+      position: absolute
+      border: 
+        left: 1px solid #ccc
+        right: 1px solid #ccc
+    &:first-of-type
+      &:before
+        border-radius: 50% 50% 0 0
+        border-top: 1px solid #ccc
+    &:last-of-type
+      &:before
+        border-radius: 0 0 50% 50%
+        border-bottom: 1px solid #ccc

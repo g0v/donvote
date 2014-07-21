@@ -1,0 +1,49 @@
+{% extends 'base.jade' %}
+{% load angularjs %}
+{% block content-margin %}
+script(type="text/javascript",src="/s/js/vote.js")
+#votelist(ng-controller="Ctrl.Vote")
+  .vote
+    .h3 add vote
+    form
+      .form-group
+        label 名稱
+        input.form-control(type="text",ng-model="newvote.name")
+      .form-group
+        label 描述
+        input.form-control(type="text",ng-model="newvote.desc")
+      .form-group
+        .btn.btn-primary(ng-click="rest2.create(newvote)") 新增
+  .vote(ng-repeat="v in votelist") 
+    .h3
+      {{'v.name'|aj}}
+      i.glyphicon.glyphicon-remove.pull-right.small(ng-click="rest2.remove(v)")
+      .pull-right.small {{'v.owner'|aj}}
+    p {{'v.desc'|aj}}
+    p
+      label(ng-repeat="p in v.plan",ng-click="rest2.sub.remove('plan',v,p)")
+        {{'p.name'|aj}}
+        i.glyphicon.glyphicon-remove
+      .panel(ng-repeat="d in v.discuss",ng-click="rest2.sub.remove('discuss',v,d)")
+        {{'d.content'|aj}}
+        i.glyphicon.glyphicon-remove
+
+    .well
+      form
+        .form-group
+          label 名稱
+          .row
+            .col-sm-7
+              input.form-control(type="text",ng-model="newplan.name")
+            .col-sm-3
+              .btn.btn-primary(ng-click="rest2.sub.create('plan',v,newplan)") 加方案
+
+    .well
+      form
+        .form-group
+          label 留言
+          input.form-control(type="text",ng-model="newdiscuss.content")
+        .form-group
+          .btn.btn-primary(ng-click="rest2.sub.create('discuss',v,newdiscuss)") 留言
+
+{% endblock %}

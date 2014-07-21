@@ -1,0 +1,25 @@
+| {% load angularjs %}
+.item: .ib
+  h3 群組設定
+  | 你所屬的群組:
+  .btn.btn-primary(ng-repeat="g in user.group",ng-click="group.remove(g)",style="margin:5px")
+    | {{'group.dict[g].name'|aj}}
+    i.glyphicon.glyphicon-minus
+  br
+  br
+  form(name="groupform",novalidate)
+    .form-group
+      select.form-control(ng-model="group.selected",ng-options="g.name for g in group.list")
+        option(value="") 選擇
+    .btn.btn-primary(ng-click="group.add()") 增加
+    br
+    br
+    | 或建立小組
+    .form-group
+      label 組名
+      input.form-control(name="name",ng-model="group.name",required)
+    .form-group
+      label 描述
+      input.form-control(name="desc",ng-model="group.desc")
+    .btn.btn-primary(ng-click="group.new()") 建立
+

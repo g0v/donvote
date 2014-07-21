@@ -1,0 +1,64 @@
+import dev
+@import nav
+@import votelist
+@import side
+@import newvote
+@import color
+
+html,body
+  margin: 0
+  padding: 0
+  width: 100%
+  height: 100%
+
+body
+  //background: #eee url(/s/img/greyzz_@2X.png) fixed
+  background: #eee url(/s/img/bk/skulls.png) fixed
+
+#content-margin
+  margin-top: 62px
+  padding: 20px
+
+input.ng-invalid, text.ng-invalid
+  color: #f00
+  border: 1px solid #e24
+  background: rgba(255,128,128,0.1)
+
+#new-vote
+  margin: 20px
+
+.btn-group > .btn.btn-list
+  clear: both
+
+.glyphicon
+  vertical-align: text-top
+
+.hr, .hr-dashed
+  border: none
+  height: 1px
+  background: #999
+  width: 100%
+  margin: 20px 0
+  box-shadow: 0 1px 1px rgba(0,0,0,0.1)
+.hr-dashed
+  border-bottom: 1px dashed #999
+  background: none
+
+.deg0
+  @include transition(all 1s)
+.deg90
+  @include transform(rotate(90deg))
+.degm90
+  @include transform(rotate(-90deg))
+
+.br-more
+  margin: 20px
+
+.right-inline
+  width: 100px
+  height: 26px
+  line-height: 16px
+  float: right
+
+.checkbox-higher
+  height: 36px

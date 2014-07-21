@@ -1,0 +1,14 @@
+| {% load angularjs %}
+.item: .ib
+  h3 建立方案
+  form
+    .form-group
+      select.form-control
+        option(value="") 選擇提案
+    .form-group
+      label 方案名稱
+      input.form-control(name="name",ng-model="name")
+    .form-group
+      label 方案描述
+      input.form-control(name="desc",ng-model="desc")
+    button.btn.btn-success 新增
