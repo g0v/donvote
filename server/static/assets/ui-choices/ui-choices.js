@@ -13,7 +13,6 @@ angular.module('ui.choices', []).directive('toggle', function($compile){
       if (!e.hasClass('ui')) {
         e.addClass('btn');
       }
-      console.log(e.attr('class'));
       if (a['ngModel']) {
         s.model = a['active'] !== undefined || !!s.model;
         e.on('click', function(){
@@ -86,6 +85,10 @@ angular.module('ui.choices', []).directive('toggle', function($compile){
           }).map(function(it){
             return d[it].v;
           });
+        } else if (s.type === "single") {
+          return s.model = k.filter(function(it){
+            return d[it].on;
+          })[0] || undefined;
         } else {
           s.model = {};
           return k.map(function(it){
@@ -110,6 +113,8 @@ angular.module('ui.choices', []).directive('toggle', function($compile){
             res$.push(x + "");
           }
           d = res$;
+        } else if (s.type === "single") {
+          d = [d + ""];
         } else {
           d = (function(){
             var results$ = [];
@@ -133,7 +138,7 @@ angular.module('ui.choices', []).directive('toggle', function($compile){
     },
     controller: function($scope, $element){
       $scope.btntype = $element.attr('btn-type');
-      this.node = {
+      $scope.node = this.node = {
         d: {},
         add: function(e, a){
           var v, that, this$ = this;
@@ -186,7 +191,7 @@ angular.module('ui.choices', []).directive('toggle', function($compile){
     },
     template: "<label><span ng-transclude></span></label>",
     link: function(s, e, a, c){
-      var ref$, that;
+      var ref$, btntype, that;
       if (!e.hasClass('ui')) {
         e.addClass('btn');
       }
@@ -196,9 +201,15 @@ angular.module('ui.choices', []).directive('toggle', function($compile){
           a.btnType = ref$;
         }
       }
+      if (typeof c === "function") {
+        c = c();
+      }
+      btntype = typeof c.btntype === 'function'
+        ? c.btntype()
+        : c.btntype;
       e.addClass((that = a['btnType'])
         ? that
-        : (that = c.btntype()) ? that : 'btn-primary');
+        : (that = btntype) ? that : 'btn-primary');
       c.node.add(e, a);
       return e.on('click', function(){
         var r, v;

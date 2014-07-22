@@ -13,7 +13,6 @@ x$.directive('accordion', function($compile, $timeout){
     link: function(s, e, a){
       var cog;
       cog = [['auto', '0', 'visible', '1'], ['0', 'auto', 'hidden', '0.5']];
-      console.log(a['ngExpand'], e.height());
       return s.$watch('expand', function(v){
         var c, r;
         if (typeof v !== "undefined") {
@@ -23,7 +22,6 @@ x$.directive('accordion', function($compile, $timeout){
           e.height(c[0]);
           r = e.height();
           e.height(c[1]);
-          console.log(a['ngExpand'], c[0], r, c[2]);
           e.css({
             overflow: c[2]
           });

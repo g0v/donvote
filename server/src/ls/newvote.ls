@@ -1,5 +1,5 @@
 angular.module \donvote
-  ..controller \newvote, ($scope) ->
+  ..controller \newvote, ($scope, $timeout, $http) ->
     $scope.plan = do
       name: ""
       desc: ""
@@ -9,19 +9,19 @@ angular.module \donvote
       startCountDown: 3600000
       duration: 86400000
       endCountDown: 3600000
-      planCount: 1
-      qualifiedRate: 50
+      planCount: 2
+      qualifiedRate: 25
       karmaRate: 10
       karmaCount: 10
-      agreeRate: 30
-      closeQuestionRate: 90
+      agreeRate: 20
+      answerRate: 80
       voteRate: 75
       maxChoiceCount: 2
       rankMethod: 1
-      endDateType: 1
+      endByDuration: false
       disclosedBallot: false
-      nullTicketRate: 30
-      validVoteRate: 75
+      nullTicketRate: 40
+      validVoteRate: 66
       obtainRate: 30
     $scope.quick = {}
     $scope.custom = do
@@ -32,6 +32,8 @@ angular.module \donvote
       disclosedBallot: 0
       endDateType: 1
 
+    $scope.$watch 'custom.disclosedBallot' (v) -> $scope.vote.disclosedBallot = if v => true else false
+    $scope.$watch 'vote.disclosedBallot' (v) -> $scope.custom.disclosedBallot = if v => 1 else 0
     quick-time-update = (v) -> if v =>
       if v[1] =>
         $scope.vote <<< do
@@ -64,12 +66,22 @@ angular.module \donvote
       else =>
         $scope.vote.voteMethod = {4:true}
     $scope.$watch 'quick.time', quick-time-update
-    $scope.$watch 'custom.time', -> quick-time-update $scope.quick.time
+    $scope.$watch 'custom.time', -> if !it => quick-time-update $scope.quick.time
     $scope.$watch 'quick.plan', quick-plan-update
-    $scope.$watch 'custom.plan', -> quick-plan-update $scope.quick.plan
+    $scope.$watch 'custom.plan', -> if !it => quick-plan-update $scope.quick.plan
     $scope.newplan = (p) -> if p.name =>
       $scope.vote.plan.push {} <<< p{name, desc}
     $scope.removeplan = (p) ->
       $scope.vote.plan = $scope.vote.plan.filter -> it.name != p.name
     $scope.newvote = (v) ->
       console.log v
+    $timeout ->
+      $http do
+        url: \/api/vote/1
+        method: \GET
+      .success (d) -> 
+        console.log d
+        $scope.custom.time = true
+        $scope.custom.plan = true
+        $scope.vote = d
+    , 1000

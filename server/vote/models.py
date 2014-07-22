@@ -64,16 +64,16 @@ class Vote(WithDateModel):
   startMethod = models.CharField(max_length=1,choices=START_END_METHODS, default='1')
   startDate = models.DateTimeField(blank=True,null=True)
   needPlan = models.BooleanField(default=False) # 至少要有多少方案
-  planCount = models.IntegerField(default=3)
+  planCount = models.IntegerField(default=2)
   needKarma = models.BooleanField(default=False) # 方案 Karma 至少要多少
-  karmaRate = models.FloatField(default=0.25)
+  karmaRate = models.FloatField(default=10.0)
   karmaCount = models.IntegerField(default=10)
   needQuality = models.BooleanField(default=False) # 多少方案的 Karma 要足夠
-  QualifiedRate = models.FloatField(default=0.67)
+  qualifiedRate = models.FloatField(default=25)
   needAgree = models.BooleanField(default=False) # 需要大家同意開始
-  AgreeRate = models.FloatField(default=0.7)
+  agreeRate = models.FloatField(default=20)
   needAnswer = models.BooleanField(default=False) # 問題需要回答
-  answerRate = models.FloatField(default=0.8)
+  answerRate = models.FloatField(default=70)
   needStartCountDown = models.BooleanField(default=False) # 開始前要倒數
   startCountDown = models.IntegerField(default=0)
 
@@ -83,13 +83,13 @@ class Vote(WithDateModel):
   endByDuration = models.BooleanField(default=False) # 以時間長度來算結束時間
   duration = models.IntegerField(default=0) # 投票期間的時間長度
   needVote = models.BooleanField(default=False) # 投票率要夠高
-  voteRate = models.FloatField(default=0.6)
+  voteRate = models.FloatField(default=75)
   needEndCountDown = models.BooleanField(default=False) # 結束前要倒數
   endCountDown = models.IntegerField(default=0)
   
   # approach
   voteMethod = models.CharField(max_length=1, choices=VOTE_METHODS, default='1')
-  maxChoiceCount = models.IntegerField(default=3)
+  maxChoiceCount = models.IntegerField(default=2)
   rankMethod = models.CharField(max_length=1,choices=RANK_ALGORITHM, default='1')
 
   # cowork options
@@ -100,17 +100,17 @@ class Vote(WithDateModel):
 
   # voting options
   noProxy = models.BooleanField(default=False) # 不允許委任投票, 須親自投票
-  disclosedBallot = models.BooleanField(default=True) # disclosed / 記名投票
+  disclosedBallot = models.BooleanField(default=False) # disclosed / 不記名投票
   allowAnonymous = models.BooleanField(default=False) # 未登入可投票
 
   # valid vote option
   allowNullTicket = models.BooleanField(default=True) # 允許廢票
   useNullTicketRate = models.BooleanField(default=False) # 廢票過高時投票無效
-  nullTickRate = models.FloatField(default=0.2) # 廢票率門檻
+  nullTicketRate = models.FloatField(default=40) # 廢票率門檻
   useValidVoteRate = models.BooleanField(default=True) # valid vote with enough ballot / 表决有效之條件投票率
-  validVoteRate = models.FloatField(default=0.6) # 有效投票率
+  validVoteRate = models.FloatField(default=66) # 有效投票率
   useObtainRate = models.BooleanField(default=False) # 最高得票率需高於一定門檻
-  ObtainRate = models.FloatField(default=0.3)
+  obtainRate = models.FloatField(default=30)
 
 class DonableModel(models.Model):
   karma = models.ManyToManyField(Karma,blank=True)

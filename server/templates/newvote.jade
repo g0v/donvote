@@ -48,7 +48,7 @@ form#vote-new(ng-controller="newvote")
       .col-sm-3.text-right
         h4 開始時間
       .col-sm-9
-        choices(ng-model="vote.startMethod",btn-type="btn-default")
+        choices(ng-model="vote.startMethod",btn-type="btn-default",data-type="single")
           choice(value="1",active,fallback) 手動開始
           choice(value="2") 指定時間
           choice(value="3") 條件開始
@@ -73,7 +73,7 @@ form#vote-new(ng-controller="newvote")
                 .dropdown
                   a#dropdown-startdate.dropdown-toggle(role="button",data-toggle="dropdown")
                     .input-group
-                      input.form-control(name="startDate",ng-model="vote.startDate",type="date")
+                      input.form-control(name="startDate",ng-model="vote.startDate",type="text")
                       span.input-group-addon
                         i.glyphicon.glyphicon-calendar
                   ul.dropdown-menu(role="menu")
@@ -128,7 +128,7 @@ form#vote-new(ng-controller="newvote")
       .col-sm-3.text-right
         h4 結束時間
       .col-sm-9
-        choices(ng-model="vote.endMethod",btn-type="btn-default")
+        choices(ng-model="vote.endMethod",btn-type="btn-default",data-type="single")
           choice(value="1",active,fallback) 手動結束
           choice(value="2") 指定時間
           choice(value="3") 條件結束
@@ -153,7 +153,7 @@ form#vote-new(ng-controller="newvote")
                   input(type="radio",name="endDateType",value="1",ng-model="custom.endDateType",checked)
                   .form-group
                     label 指定結束時間
-                    input.form-control(type="date",ng-model="vote.endDate",ng-disabled="custom.endDateType!=1")
+                    input.form-control(type="text",ng-model="vote.endDate",ng-disabled="custom.endDateType!=1")
               .radio
                 label
                   input(type="radio",name="endDateType",value="2",ng-model="custom.endDateType")
@@ -211,7 +211,7 @@ form#vote-new(ng-controller="newvote")
       .col-sm-3.text-right
         h4 投票形式
       .col-sm-9
-        choices(ng-model="vote.voteMethod",btn-type="btn-default")
+        choices(ng-model="vote.voteMethod",btn-type="btn-default",data-type="single")
           choice(value="1",fallback,active) 單選
           choice(value="2") 多選
           choice(value="3") 排名

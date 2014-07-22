@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 from .models import Vote, Plan, Discuss
 import json
 
-class BlahField(serializers.RelatedField):
+class PlanField(serializers.RelatedField):
   read_only = False
   def to_native(self, value):
     return {"id": value.pk, "name": value.name}
@@ -16,12 +16,11 @@ class BlahField(serializers.RelatedField):
     plan.object.save()
     return plan.object
 
-class Blah2Field(serializers.RelatedField):
+class DiscussField(serializers.RelatedField):
   read_only = False
   def to_native(self, value):
     return {"id": value.pk, "content": value.content}
   def from_native(self, data):
-    print("blah2: i am going to create a field")
     d = Discuss.objects.filter(pk=data.get("id") or -1)
     if len(d) > 0: return d[0]
     discuss = DiscussSerializer(data=data)
@@ -44,19 +43,40 @@ class DiscussSerializer(serializers.ModelSerializer):
 
 class VoteSerializer(serializers.ModelSerializer):
   owner = serializers.Field(source='owner.username')
-  plan = BlahField(many=True)
-  discuss = Blah2Field(many=True)
+  plan = PlanField(many=True)
+  discuss = DiscussField(many=True)
   partial = True
 
   class Meta:
     model = Vote
-    field = ( 'owner', 'karma', 'discuss', 'plan', 'ongoing', 'startMethod',
-      'startDate', 'needKarma', 'needPlan', 'needQuality', 'needAgree',
-      'karmaRate', 'planCount', 'planKarmaRate', 'planQualifiedRate',
-      'closeQustionRate', 'autoStartCountdown', 'AgreeRate', 'endMethod',
-      'duration', 'voteRate', 'autoEndCountdown', 'voteMethod',
-      'maxChoiceCount', 'disclosedBallot', 'allowAnonymous', 'allowNullTicket',
-      'validCriteria', 'newPlanFromAll', 'invalidNullTickRate', 'validVoteRate',
-      'createDate', 'modifyDate', 'planlist'
+    field = ( 
+      # generic
+      'owner', 'karma', 'discuss', 'name', 'desc', 'plan', 'ongoing', 
+      'createDate', 'modifyDate',
+      # start date
+      'startMethod', 'startDate', 
+        'needPlan', 'planCount', 
+        'needKarma', 'karmaRate', 'karmaCount',
+        'needQuality', 'qualifiedRate',
+        'needAgree', 'agreeRate',
+        'needAnwser', 'answerRate',
+        'needStartCountDown', 'startCountDown',
+      # end date
+      'endMethod', 'endByDuration', 'endDate', 'duration',
+        'needVote', 'voteRate',
+        'needEndCountDown', 'endCountDown',
+      # vote approach
+      'voteMethod', 'maxChoiceCount', 'rankMethod'
+
+      # cowork option
+      'mute', 'noKarma', 'allowFork', 'allowNewPlan',
+
+      # vote option
+      'noProxy', 'disclosedBallot', 'allowAnonymous'
+      
+      # validation
+      'allowNullTicket', 'useNullTicketRate', 'nullTicketRate',
+      'useValidVoteRate', 'validVoteRate',
+      'useObtainRate', 'obtainRate',
     )
     depth = 1
