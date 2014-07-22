@@ -2,17 +2,134 @@
 var x$;
 x$ = angular.module('donvote');
 x$.controller('newvote', function($scope){
+  var quickTimeUpdate, quickPlanUpdate;
+  $scope.plan = {
+    name: "",
+    desc: ""
+  };
   $scope.vote = {
-    planQualifiedRate: 50,
-    planKarmaRate: 10,
-    planKarmaCount: 10,
+    name: "",
+    desc: "",
+    startCountDown: 3600000,
+    duration: 86400000,
+    endCountDown: 3600000,
+    planCount: 1,
+    qualifiedRate: 50,
+    karmaRate: 10,
+    karmaCount: 10,
     agreeRate: 30,
-    closeQuestionRate: 90
+    closeQuestionRate: 90,
+    voteRate: 75,
+    maxChoiceCount: 2,
+    rankMethod: 1,
+    endDateType: 1,
+    disclosedBallot: false,
+    nullTicketRate: 30,
+    validVoteRate: 75,
+    obtainRate: 30
   };
   $scope.quick = {};
-  return $scope.custom = {
+  $scope.custom = {
     time: false,
     plan: false,
-    perm: false
+    perm: false,
+    disclosedBallot: 0,
+    endDateType: 1
+  };
+  quickTimeUpdate = function(v){
+    if (v) {
+      if (v[1]) {
+        return import$($scope.vote, {
+          startDate: new Date().getTime(),
+          startMethod: {
+            2: true
+          },
+          endMethod: {
+            1: true
+          }
+        });
+      } else if (v[2]) {
+        return import$($scope.vote, {
+          startMethod: {
+            1: true
+          },
+          endMethod: {
+            1: true
+          }
+        });
+      } else if (v[3]) {
+        return import$($scope.vote, {
+          startDate: new Date().getTime(),
+          startMethod: {
+            2: true
+          },
+          endMethod: {
+            2: true
+          },
+          endByDuration: true,
+          duration: [1, 0, 0]
+        });
+      }
+    }
+  };
+  quickPlanUpdate = function(v){
+    if (v) {
+      if (v[1]) {
+        $scope.vote.voteMethod = {
+          1: true
+        };
+        return $scope.vote.plan = [
+          {
+            name: '贊同'
+          }, {
+            name: '反對'
+          }
+        ];
+      } else if (v[2]) {
+        $scope.vote.plan = [
+          {
+            name: '贊同'
+          }, {
+            name: '反對'
+          }, {
+            name: '無感'
+          }
+        ];
+        return $scope.vote.voteMethod = {
+          1: true
+        };
+      } else {
+        return $scope.vote.voteMethod = {
+          4: true
+        };
+      }
+    }
+  };
+  $scope.$watch('quick.time', quickTimeUpdate);
+  $scope.$watch('custom.time', function(){
+    return quickTimeUpdate($scope.quick.time);
+  });
+  $scope.$watch('quick.plan', quickPlanUpdate);
+  $scope.$watch('custom.plan', function(){
+    return quickPlanUpdate($scope.quick.plan);
+  });
+  $scope.newplan = function(p){
+    var ref$;
+    if (p.name) {
+      return $scope.vote.plan.push((ref$ = {}, ref$.name = p.name, ref$.desc = p.desc, ref$));
+    }
+  };
+  $scope.removeplan = function(p){
+    return $scope.vote.plan = $scope.vote.plan.filter(function(it){
+      return it.name !== p.name;
+    });
+  };
+  return $scope.newvote = function(v){
+    return console.log(v);
   };
 });
+function import$(obj, src){
+  var own = {}.hasOwnProperty;
+  for (var key in src) if (own.call(src, key)) obj[key] = src[key];
+  return obj;
+}

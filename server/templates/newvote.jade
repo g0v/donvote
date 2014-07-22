@@ -47,19 +47,19 @@ form#vote-new(ng-controller="newvote")
       .col-sm-3.text-right
         h4 開始時間
       .col-sm-9
-        choices(ng-model="vote.startmethod",btn-type="btn-default")
+        choices(ng-model="vote.startMethod",btn-type="btn-default")
           choice(value="1",default,active) 手動開始
           choice(value="2") 指定時間
           choice(value="3") 條件開始
         .br-more
-        .opt.active(ng-class="{'active':vote.startmethod[1]}")
+        .opt(ng-class="{'active':vote.startMethod[1]}")
           .panel.panel-default
             .panel-heading 手動開始投票
             .panel-body
               | 在此設定下，你必須手動按下開始投票的按鈕，投票才會正式開始。
               br
               | 適合用在投票規格尚不確定的情況。
-        .opt(ng-class="{'active':vote.startmethod[2]}")
+        .opt(ng-class="{'active':vote.startMethod[2]}")
           .panel.panel-default
             .panel-heading 指定開始時間
             .panel-body
@@ -69,8 +69,8 @@ form#vote-new(ng-controller="newvote")
               .br-more
               .form-group
                 label 開始時間
-                input.form-control(name="starttime",ng-model="vote.starttime",type="date")
-        .opt(ng-class="{'active':vote.startmethod[3]}")
+                input.form-control(name="startDate",ng-model="vote.startDate",type="date")
+        .opt(ng-class="{'active':vote.startMethod[3]}")
           .panel.panel-default
             .panel-heading 設定開始條件
             .panel-body
@@ -80,19 +80,24 @@ form#vote-new(ng-controller="newvote")
               .br-more
               .checkbox.checkbox-higher
                 label
-                  input(type="checkbox",ng-model="vote.needQuality")
-                  | 有效方案占全部的 {{'vote.planQualifiedRate'|aj}}% 以上
-                  input.form-control.input-sm.right-inline(name="planQualifiedRate",ng-model="vote.planQualifiedRate",type="number",ng-disabled="!vote.needQuality")
+                  input(type="checkbox",ng-model="vote.needPlan")
+                  | 至少要有 {{'vote.planCount'|aj}} 個方案以上
+                  input.form-control.input-sm.right-inline(name="planCount",ng-model="vote.planCount",type="number",ng-disabled="!vote.needPlan")
               .checkbox.checkbox-higher
                 label
                   input(type="checkbox",ng-model="vote.needKarmaRate")
-                  | 方案需總投票人數的 {{'vote.planKarmaRate'|aj}}% 以上認同方為有效
-                  input.form-control.input-sm.right-inline(name="planKarmaRate",ng-model="vote.planKarmaRate",type="number",ng-disabled="!vote.needKarmaRate")
+                  | 方案需總投票人數的 {{'vote.karmaRate'|aj}}% 以上認同方為有效
+                  input.form-control.input-sm.right-inline(name="karmaRate",ng-model="vote.karmaRate",type="number",ng-disabled="!vote.needKarmaRate")
               .checkbox.checkbox-higher
                 label
                   input(type="checkbox",ng-model="vote.needKarmaCount")
                   | 方案需 {{'vote.planKarmaCount'|aj}} 人以上認同方為有效
-                  input.form-control.input-sm.right-inline(name="planKarmaCount",ng-model="vote.planKarmaCount",type="number",ng-disabled="!vote.needKarmaCount")
+                  input.form-control.input-sm.right-inline(name="karmaCount",ng-model="vote.karmaCount",type="number",ng-disabled="!vote.needKarmaCount")
+              .checkbox.checkbox-higher
+                label
+                  input(type="checkbox",ng-model="vote.needQuality")
+                  | 有效方案占全部的 {{'vote.qualifiedRate'|aj}}% 以上
+                  input.form-control.input-sm.right-inline(name="qualifiedRate",ng-model="vote.qualifiedRate",type="number",ng-disabled="!vote.needQuality")
               .checkbox.checkbox-higher
                 label
                   input(type="checkbox",ng-model="vote.needAgree")
@@ -100,12 +105,14 @@ form#vote-new(ng-controller="newvote")
                   input.form-control.input-sm.right-inline(name="agreeRate",ng-model="vote.agreeRate",type="number",ng-disabled="!vote.needAgree")
               .checkbox.checkbox-higher
                 label
-                  input(type="checkbox",ng-model="vote.needCloseQuestion")
-                  | 問題回答率超過 {{'vote.closeQuestionRate'|aj}}%
-                  input.form-control.input-sm.right-inline(name="closeQuestionRate",ng-model="vote.closeQuestionRate",type="number",ng-disabled="!vote.needCloseQuestion")
-              .form-group
-                label 條件達成後，開始前的倒數時間
-                input.form-control(name="autoStartCountdown",type="number",ng-model="vote.autoStartCountdown")
+                  input(type="checkbox",ng-model="vote.needAnswer")
+                  | 問題回答率超過 {{'vote.answerRate'|aj}}%
+                  input.form-control.input-sm.right-inline(name="answerRate",ng-model="vote.answerRate",type="number",ng-disabled="!vote.needAnswer")
+              .checkbox.checkbox-higher
+                label 
+                  input(type="checkbox",ng-model="vote.needStartCountDown")
+                  | 條件達成後，開始前的倒數時間
+                  timedelta.right-inline(ng-model="vote.startCountDown",ng-disabled="!vote.needStartCountDown")
     .row
       .col-sm-3 
       .col-sm-9: .hr-dashed
@@ -113,19 +120,19 @@ form#vote-new(ng-controller="newvote")
       .col-sm-3.text-right
         h4 結束時間
       .col-sm-9
-        choices(ng-model="vote.endmethod",btn-type="btn-default")
+        choices(ng-model="vote.endMethod",btn-type="btn-default")
           choice(value="1",default,active) 手動結束
           choice(value="2") 指定時間
           choice(value="3") 條件結束
         .br-more
-        .opt.active(ng-class="{'active':vote.endmethod[1]}")
+        .opt.active(ng-class="{'active':vote.endMethod[1]}")
           .panel.panel-default
             .panel-heading 手動結束投票
             .panel-body
               | 在此設定下，你必須手動按下結束投票的按鈕，投票才會正式結束。 
               br
               | 適合用在投票時程不固定的情況。
-        .opt(ng-class="{'active':vote.endmethod[2]}")
+        .opt(ng-class="{'active':vote.endMethod[2]}")
           .panel.panel-default
             .panel-heading 指定結束時間
             .panel-body
@@ -135,17 +142,17 @@ form#vote-new(ng-controller="newvote")
               .br-more
               .radio
                 label
-                  input(type="radio")
+                  input(type="radio",name="endDateType",value="1",ng-model="custom.endDateType",checked)
                   .form-group
                     label 指定結束時間
-                    input.form-control(type="text",ng-model="vote.endtime")
+                    input.form-control(type="date",ng-model="vote.endDate",ng-disabled="custom.endDateType!=1")
               .radio
                 label
-                  input(type="radio")
+                  input(type="radio",name="endDateType",value="2",ng-model="custom.endDateType")
                   .form-group
-                    label 指定投票長度
-                    input.form-control(type="text",ng-model="vote.endtime")
-        .opt(ng-class="{'active':vote.endmethod[3]}")
+                    label 指定投票時間長度
+                    timedelta(ng-model="vote.duration",ng-disabled="custom.endDateType!=2")
+        .opt(ng-class="{'active':vote.endMethod[3]}")
           .panel.panel-default
             .panel-heading 設定結束條件
             .panel-body
@@ -153,14 +160,16 @@ form#vote-new(ng-controller="newvote")
               br
               | 適合用在投票案需要滿足一定條件才成立的情況。
               .br-more
-              .checkbox
+              .checkbox.checkbox-higher
                 label
-                  input(type="checkbox")
-                  | 投票率高於 50 %
-              .form-group
-                label 結束前倒數
-                input.form-control(type="text")
-
+                  input(type="checkbox",ng-model="vote.needVote")
+                  | 投票率高於 {{'vote.voteRate'|aj}}%
+                  input.form-control.input-sm.right-inline(name="voteRate",ng-model="vote.voteRate",type="number",ng-disabled="!vote.needVote")
+              .checkbox.checkbox-higher
+                label 
+                  input(type="checkbox",ng-model="vote.needEndCountDown")
+                  | 條件達成後，結束前的倒數時間
+                timedelta.right-inline(ng-model="vote.endCountDown",ng-disabled="!vote.needEndCountDown")
   br
   .row.opt.active(ng-class="{'active':!custom.plan}")
     .col-sm-3.text-right
@@ -175,7 +184,7 @@ form#vote-new(ng-controller="newvote")
           .desc 選項包含贊同與反對
         choice(value="2")
           .title 三種選擇
-          .desc 贊同、反對以及廢票
+          .desc 贊同、反對以及無感
         choice(value="3")
           .title 五星評分
           .desc 以星等表達支持程度
@@ -194,41 +203,33 @@ form#vote-new(ng-controller="newvote")
       .col-sm-3.text-right
         h4 投票形式
       .col-sm-9
-        .btn-group
-          .btn.btn-default 單選
-          .btn.btn-default 多選
-          .btn.btn-default 排名
-          .btn.btn-default 給分
+        choices(ng-model="vote.voteMethod",btn-type="btn-default")
+          choice(value="1",fallback,active) 單選
+          choice(value="2") 多選
+          choice(value="3") 排名
+          choice(value="4") 給分
     .row
-      .col-sm-3.text-right
-        h4 品質控制
-      .col-sm-9
-        .checkbox
-          label
-            input(type="checkbox")
-            | 夠多贊同，方案才生效。門檻: 10人連署贊同
       .col-sm-3.text-right
         h4 多選票數
       .col-sm-9
         .form-group
-          input.form-control(type="number")
+          input.form-control(type="number",ng-model="vote.maxChoiceCount",ng-disabled="!vote.voteMethod[2]")
       .col-sm-3.text-right
         h4 排名演算法
       .col-sm-9
-        select.form-control
-          option Schulze Method
-          option Ranked Pairs
-          option Copeland
-          option Kemeny-Young
-          option Nanson
-          option Baldwin
+        select.form-control(name="rankMethod",ng-model="vote.rankMethod",ng-disabled="!vote.voteMethod[3] && !vote.voteMethod[4]")
+          option(value="1") Schulze Method
+          option(value="2") Ranked Pairs
+          option(value="3") Copeland
+          option(value="4") Kemeny-Young
+          option(value="5") Nanson
+          option(value="6") Baldwin
     .row
       .col-sm-3.text-right
         h4 方案列表
       .col-sm-9
-        .btn.btn-default 方案一
-        .btn.btn-default 方案二
-        .btn.btn-default 方案三
+        .btn.btn-dashed 請於下方新增方案
+        .btn.btn-default.btn-click-rm(ng-repeat="p in vote.plan",ng-click="removeplan(p)") {{'p.name'|aj}}
     .row
       .col-sm-3.text-right
         h3 新增方案
@@ -237,24 +238,22 @@ form#vote-new(ng-controller="newvote")
         h4 方案名稱
       .col-sm-9
         .form-group
-          input.form-control(type="text")
+          input.form-control(type="text",name="planname",ng-model="plan.name",placeholder="例如：我不贊同建設丹大野生動物保護區")
       .col-sm-3.text-right
         h4 方案描述
       .col-sm-9
         .form-group
-          textarea.form-control
+          textarea.form-control(name="plandesc",ng-model="plan.desc",placeholder="請詳加描述這一個方案的細節")
       .col-sm-3
       .col-sm-9
-        .btn.btn-primary.btn-rad.btn-block 新增
+        .btn.btn-primary.btn-rad.btn-block(ng-click="newplan(plan)") 新增方案
   br
   .opt.active(ng-class="{'active':!custom.perm}")
     .row
       .col-sm-3.text-right
-        h3 權限設定
-    .row
-      .col-sm-3.text-right
         h4 投票權
-        a(ng-click="custom.perm=true") 
+        //- TODO - add permission
+        //-a(ng-click="custom.perm=true") 
           i.glyphicon.glyphicon-cog
           |  自訂..
       .col-sm-9.quick-btns
@@ -262,10 +261,10 @@ form#vote-new(ng-controller="newvote")
           choice(value="1",fallback,active)
             .title 所有用戶
             .desc 全站使用者都可投票
-          choice(value="2")
+          choice(value="2",disabled)
             .title 我的朋友
             .desc 只有朋友們可以投票
-          choice(value="3")
+          choice(value="3",disabled)
             .title 邀請投票
             .desc 需受到邀請才可投票
   .opt.bl-green(ng-class="{'active':custom.perm}")
@@ -309,57 +308,65 @@ form#vote-new(ng-controller="newvote")
       .col-sm-9
         .radio
           label
-            input(type="radio")
+            input(type="radio",name="disclosedBallot",ng-model="custom.disclosedBallot",value="1")
             | 記名投票
         .radio
           label
-            input(type="radio")
+            input(type="radio",name="disclosedBallot",ng-model="custom.disclosedBallot",value="0")
             | 不記名投票
         .checkbox
           label
-            input(type="checkbox")
+            input(type="checkbox",name="allowAnonymous",ng-model="vote.allowAnonymous")
             | 沒登入也可以投票
+        .checkbox
+          label
+            input(type="checkbox",name="noProxy",ng-model="vote.noProxy")
+            | 需本人親自投票，不可委任
       .col-sm-3.text-right
         h4 投票有效性
       .col-sm-9
         .checkbox
           label
-            input(type="checkbox")
+            input(type="checkbox",name="allowNullTickt",ng-model="vote.allowNullTicket")
             | 允許廢票
-        .checkbox
+        .checkbox.checkbox-higher
           label
-            input(type="checkbox")
-            | 廢票過多時投票作廢 - 廢票率門檻: 50%
-        .checkbox
+            input(type="checkbox",name="useNullTicketRate",ng-model="vote.useNullTicketRate")
+            | 廢票率大於 {{'vote.nullTicketRate'|aj}}% 時投票作廢
+            input.form-control.input-sm.right-inline(name="nullTicketRate",ng-model="vote.nullTicketRate",type="number",ng-disabled="!vote.useNullTicketRate")
+        .checkbox.checkbox-higher
           label
-            input(type="checkbox")
-            | 票數不足時投票作廢 - 投票率門檻: 50%
-        .checkbox
+            input(type="checkbox",name="useValidVoteRate",ng-model="vote.useValidVoteRate")
+            | 票數不足 {{'vote.validVoteRate'|aj}}% 時投票作廢
+            input.form-control.input-sm.right-inline(name="validVoteRate",ng-model="vote.validVoteRate",type="number",ng-disabled="!vote.useValidVoteRate")
+
+        .checkbox.checkbox-higher
           label
-            input(type="checkbox")
-            | 得票不足時投票作廢 - 得票率門檻: 30%
+            input(type="checkbox",name="useObtainRate",ng-model="vote.useObtainRate")
+            | 最高得票率不足 {{'vote.obtainRate'|aj}}% 時投票作廢
+            input.form-control.input-sm.right-inline(name="obtainRate",ng-model="vote.obtainRate",type="number",ng-disabled="!vote.useObtainRate")
       .col-sm-3.text-right
         h4 群眾協作
       .col-sm-9
         .checkbox
           label
-            input(type="checkbox")
-            | 開放留言討論
+            input(type="checkbox",name="mute",ng-model="vote.mute")
+            | 禁止留言討論
         .checkbox
           label
-            input(type="checkbox")
-            | 開放評價系統
+            input(type="checkbox",name="noKarma",ng-model="vote.noKarma")
+            | 關閉評價系統
         .checkbox
           label
-            input(type="checkbox")
-            | 允許複製投票
+            input(type="checkbox",name="allowFork",ng-model="vote.allowFork")
+            | 允許複製此投票案
         .checkbox
           label
-            input(type="checkbox")
+            input(type="checkbox",name="newPlanFromAll",ng-model="vote.allowNewPlan")
             | 投票人可開新方案
 
   hr
-  .btn.btn-success.btn-lg.btn-block 馬上建立新投票案
+  .btn.btn-success.btn-lg.btn-block(ng-click="newvote(vote)") 馬上建立新投票案
 
   br
   br

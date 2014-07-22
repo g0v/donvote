@@ -62,3 +62,42 @@ input.ng-invalid, text.ng-invalid
 
 .checkbox-higher
   height: 36px
+.timedelta
+  width: 150px
+  text-align: right
+  position: relative
+  span
+    position: absolute
+    z-index: 10
+    margin-left: -14px
+    bottom: 1px
+    font-size: 12px
+  .day, .hour, .minute
+    width: 30%
+    height: 100%
+    padding-left: 6px
+    display: inline-block
+
+.btn-dashed
+  border: 1px dashed #999
+  color: #999
+.btn-click-rm
+  position: relative
+  padding-right: 20px
+  &:after
+    position: absolute
+    font-family: 'Glyphicons Halflings'
+    -webkit-font-smoothing: antialiased
+    content: "\2212"
+    display: block
+    top: 50%
+    height: 12px
+    line-height: 12px
+    margin-top: -6px
+    right: 3px
+    color: #ccc
+    font-size: 12px
+
+.btn-click-rm:hover 
+  &:after
+    color: #f00
