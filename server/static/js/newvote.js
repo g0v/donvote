@@ -3,40 +3,47 @@ var x$;
 x$ = angular.module('donvote');
 x$.controller('newvote', function($scope, $timeout, $http){
   var quickTimeUpdate, quickPlanUpdate;
-  $scope.plan = {
-    name: "",
-    desc: ""
+  $scope.clean = function(){
+    $scope.plan = {
+      name: "",
+      desc: ""
+    };
+    $scope.vote = {
+      name: "",
+      desc: "",
+      karma: [],
+      plan: [],
+      discuss: [],
+      startDate: new Date(),
+      startCountDown: 3600000,
+      duration: 86400000,
+      endCountDown: 3600000,
+      planCount: 2,
+      qualifiedRate: 25,
+      karmaRate: 10,
+      karmaCount: 10,
+      agreeRate: 20,
+      answerRate: 80,
+      voteRate: 75,
+      maxChoiceCount: 2,
+      rankMethod: '1',
+      endByDuration: false,
+      disclosedBallot: false,
+      nullTicketRate: 40,
+      validVoteRate: 66,
+      obtainRate: 30
+    };
+    $scope.quick = {};
+    return $scope.custom = {
+      time: false,
+      plan: false,
+      perm: false,
+      adv: false,
+      disclosedBallot: 0,
+      endDateType: 1
+    };
   };
-  $scope.vote = {
-    name: "",
-    desc: "",
-    startCountDown: 3600000,
-    duration: 86400000,
-    endCountDown: 3600000,
-    planCount: 2,
-    qualifiedRate: 25,
-    karmaRate: 10,
-    karmaCount: 10,
-    agreeRate: 20,
-    answerRate: 80,
-    voteRate: 75,
-    maxChoiceCount: 2,
-    rankMethod: 1,
-    endByDuration: false,
-    disclosedBallot: false,
-    nullTicketRate: 40,
-    validVoteRate: 66,
-    obtainRate: 30
-  };
-  $scope.quick = {};
-  $scope.custom = {
-    time: false,
-    plan: false,
-    perm: false,
-    adv: false,
-    disclosedBallot: 0,
-    endDateType: 1
-  };
+  $scope.clean();
   $scope.$watch('custom.disclosedBallot', function(v){
     return $scope.vote.disclosedBallot = v ? true : false;
   });
@@ -47,34 +54,22 @@ x$.controller('newvote', function($scope, $timeout, $http){
     if (v) {
       if (v[1]) {
         return import$($scope.vote, {
-          startDate: new Date().getTime(),
-          startMethod: {
-            2: true
-          },
-          endMethod: {
-            1: true
-          }
+          startDate: new Date(),
+          startMethod: '2',
+          endMethod: '1'
         });
       } else if (v[2]) {
         return import$($scope.vote, {
-          startMethod: {
-            1: true
-          },
-          endMethod: {
-            1: true
-          }
+          startMethod: '1',
+          endMethod: '1'
         });
       } else if (v[3]) {
         return import$($scope.vote, {
-          startDate: new Date().getTime(),
-          startMethod: {
-            2: true
-          },
-          endMethod: {
-            2: true
-          },
+          startDate: new Date(),
+          startMethod: '2',
+          endMethod: '2',
           endByDuration: true,
-          duration: [1, 0, 0]
+          duration: 86400000
         });
       }
     }
@@ -82,9 +77,7 @@ x$.controller('newvote', function($scope, $timeout, $http){
   quickPlanUpdate = function(v){
     if (v) {
       if (v[1]) {
-        $scope.vote.voteMethod = {
-          1: true
-        };
+        $scope.vote.voteMethod = '1';
         return $scope.vote.plan = [
           {
             name: '贊同'
@@ -102,13 +95,9 @@ x$.controller('newvote', function($scope, $timeout, $http){
             name: '無感'
           }
         ];
-        return $scope.vote.voteMethod = {
-          1: true
-        };
+        return $scope.vote.voteMethod = '1';
       } else {
-        return $scope.vote.voteMethod = {
-          4: true
-        };
+        return $scope.vote.voteMethod = '4';
       }
     }
   };
@@ -135,20 +124,25 @@ x$.controller('newvote', function($scope, $timeout, $http){
       return it.name !== p.name;
     });
   };
-  $scope.newvote = function(v){
-    return console.log(v);
-  };
-  return $timeout(function(){
+  $scope.state = 1;
+  return $scope.newvote = function(v){
+    $scope.state = 2;
     return $http({
-      url: '/api/vote/1',
-      method: 'GET'
+      url: '/api/vote/',
+      method: 'POST',
+      data: JSON.stringify($scope.vote)
     }).success(function(d){
-      console.log(d);
-      $scope.custom.time = true;
-      $scope.custom.plan = true;
-      return $scope.vote = d;
+      $scope.clean();
+      return $timeout(function(){
+        $scope.state = 3;
+        return $timeout(function(){
+          return $scope.state = 1;
+        }, 4000);
+      }, 2000);
+    }).error(function(e){
+      return console.error(e);
     });
-  }, 1000);
+  };
 });
 function import$(obj, src){
   var own = {}.hasOwnProperty;

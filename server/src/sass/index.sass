@@ -101,3 +101,17 @@ input.ng-invalid, text.ng-invalid
 .btn-click-rm:hover 
   &:after
     color: #f00
+
+.pointer
+  cursor: pointer
+
+.btn-active
+  opacity: 1
+  @include transition(all 1s)
+
+.btn-active.deactive
+  opacity: 0
+  height: 0
+  overflow: hidden
+  padding: 0
+  margin: 0

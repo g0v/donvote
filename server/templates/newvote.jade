@@ -1,4 +1,5 @@
 {% load angularjs %}
+{% load staticfiles %}
 script(type="text/javascript",src="/s/js/newvote.js")
 form#vote-new(ng-controller="newvote")
   h2 建立投票案
@@ -22,7 +23,7 @@ form#vote-new(ng-controller="newvote")
   accordion.row(ng-expand="!custom.time")
     .col-sm-3.text-right
       h4 投票時間
-      a(ng-click="custom.time = true")
+      a.pointer(ng-click="custom.time = true")
         i.glyphicon.glyphicon-cog
         |  自訂..
     .col-sm-9.quick-btns
@@ -182,7 +183,7 @@ form#vote-new(ng-controller="newvote")
   accordion.row(ng-expand="!custom.plan")
     .col-sm-3.text-right
       h4 方案類型
-      a(ng-click="custom.plan=true") 
+      a.pointer(ng-click="custom.plan=true") 
         i.glyphicon.glyphicon-cog
         |  自訂..
     .col-sm-9.quick-btns
@@ -261,7 +262,7 @@ form#vote-new(ng-controller="newvote")
       .col-sm-3.text-right
         h4 投票權
         //- TODO - add permission
-        //-a(ng-click="custom.perm=true") 
+        //-a.pointer(ng-click="custom.perm=true") 
           i.glyphicon.glyphicon-cog
           |  自訂..
       .col-sm-9.quick-btns
@@ -374,7 +375,14 @@ form#vote-new(ng-controller="newvote")
             | 投票人可開新方案
 
   hr
-  .btn.btn-success.btn-lg.btn-block(ng-click="newvote(vote)") 馬上建立新投票案
+  .btn.btn-primary.btn-lg.btn-block.btn-active(ng-click="newvote(vote)",ng-class="{'deactive':state!=1}")
+    | 馬上建立新投票案
+  .btn.btn-warning.btn-lg.btn-block.btn-active.deactive(ng-click="newvote(vote)",ng-class="{'deactive':state!=2}")
+    | 建立投票案中
+    img(src="{% static 'img/ellipsis-pink.gif' %}")
+  .btn.btn-success.btn-lg.btn-block.btn-active.deactive(ng-click="newvote(vote)",ng-class="{'deactive':state!=3}")
+    | 投票案建立完成
+    i.glyphicon.glyphicon-ok
 
   br
   br
