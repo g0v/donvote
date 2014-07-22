@@ -54,14 +54,14 @@ form#vote-new(ng-controller="newvote")
           choice(value="2") 指定時間
           choice(value="3") 條件開始
         .br-more
-        accordion(ng-expand="vote.startMethod[1]")
+        accordion(ng-expand="vote.startMethod=='1'")
           .panel.panel-default
             .panel-heading 手動開始投票
             .panel-body
               | 在此設定下，你必須手動按下開始投票的按鈕，投票才會正式開始。
               br
               | 適合用在投票規格尚不確定的情況。
-        accordion(ng-expand="vote.startMethod[2]")
+        accordion(ng-expand="vote.startMethod=='2'")
           .panel.panel-default
             .panel-heading 指定開始時間
             .panel-body
@@ -79,7 +79,7 @@ form#vote-new(ng-controller="newvote")
                         i.glyphicon.glyphicon-calendar
                   ul.dropdown-menu(role="menu")
                     datetimepicker(ng-model="vote.startDate",data-datetimepicker-config="{dropdownSelector: '#dropdown-startdate'}")
-        accordion(ng-expand="vote.startMethod[3]")
+        accordion(ng-expand="vote.startMethod=='3'")
           .panel.panel-default
             .panel-heading 設定開始條件
             .panel-body
@@ -134,14 +134,14 @@ form#vote-new(ng-controller="newvote")
           choice(value="2") 指定時間
           choice(value="3") 條件結束
         .br-more
-        accordion(ng-expand="vote.endMethod[1]")
+        accordion(ng-expand="vote.endMethod=='1'")
           .panel.panel-default
             .panel-heading 手動結束投票
             .panel-body
               | 在此設定下，你必須手動按下結束投票的按鈕，投票才會正式結束。 
               br
               | 適合用在投票時程不固定的情況。
-        accordion(ng-expand="vote.endMethod[2]")
+        accordion(ng-expand="vote.endMethod=='2'")
           .panel.panel-default
             .panel-heading 指定結束時間
             .panel-body
@@ -161,7 +161,7 @@ form#vote-new(ng-controller="newvote")
                   .form-group
                     label 指定投票時間長度
                     timedelta(ng-model="vote.duration",ng-disabled="custom.endDateType!=2")
-        accordion(ng-expand="vote.endMethod[3]")
+        accordion(ng-expand="vote.endMethod=='3'")
           .panel.panel-default
             .panel-heading 設定結束條件
             .panel-body
