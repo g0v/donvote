@@ -1,0 +1,9 @@
+{% extends 'two-column.jade' %}
+{% load angularjs %}
+{% load staticfiles %}
+{% block 'content' %}
+h2 {{vote.name}}
+| {{vote.startMethod}}
+| {{vote.endMethod}}
+{% endblock %}
+

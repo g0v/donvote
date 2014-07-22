@@ -5,5 +5,7 @@
   .col-sm-3
     {% include 'side.jade' %}
   .col-sm-9
-    {% include 'newvote.jade' %}
+    {% block 'content' %}
+    {% endblock %}
+    //-{% include 'newvote.jade' %}
 {% endblock %}

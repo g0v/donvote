@@ -3,6 +3,7 @@ from rest_framework import permissions
 from .permissions import IsOwnerOrReadOnly, VotePermission, PlanPermission
 from .serializers import VoteSerializer, PlanSerializer, DiscussSerializer
 from .models import Vote, Plan, Discuss
+from django.views.generic import TemplateView
 
 class VoteList(generics.ListCreateAPIView):
   permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
@@ -46,3 +47,13 @@ class DiscussDetail(generics.RetrieveUpdateDestroyAPIView):
   serializer_class = DiscussSerializer
   def pre_save(self, obj):
     obj.owner = self.request.user
+
+class VoteDetailView(TemplateView):
+  template_name = "vote/detail.jade"
+  def get_context_data(self, **kwargs):
+    context = super(VoteDetailView, self).get_context_data(**kwargs)
+    print(kwargs["pk"])
+    vote = Vote.objects.filter(pk=kwargs['pk'])
+    context['vote'] = vote[0] if len(vote) else None
+    print(vote)
+    return context

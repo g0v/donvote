@@ -1,5 +1,7 @@
+{% extends 'two-column.jade' %}
 {% load angularjs %}
 {% load staticfiles %}
+{% block 'content' %}
 script(type="text/javascript",src="/s/js/newvote.js")
 form#vote-new(ng-controller="newvote")
   h2 建立投票案
@@ -388,4 +390,4 @@ form#vote-new(ng-controller="newvote")
   br
   br
   br
-
+{% endblock %}
