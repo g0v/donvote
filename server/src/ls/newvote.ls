@@ -28,6 +28,7 @@ angular.module \donvote
       time: false
       plan: false
       perm: false
+      adv: false
       disclosedBallot: 0
       endDateType: 1
 

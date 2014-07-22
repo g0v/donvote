@@ -6,7 +6,7 @@ err = function(it){
 ok = function(it){
   return console.log("[OK]", it);
 };
-x$ = angular.module('donvote', ['ui.choices']);
+x$ = angular.module('donvote', ['ui.choices', 'ui.bootstrap.datetimepicker']);
 x$.config(function($httpProvider){
   return $httpProvider.defaults.headers.common["X-CSRFToken"] = $.cookie('csrftoken');
 });

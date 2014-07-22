@@ -33,6 +33,7 @@ x$.controller('newvote', function($scope){
     time: false,
     plan: false,
     perm: false,
+    adv: false,
     disclosedBallot: 0,
     endDateType: 1
   };
