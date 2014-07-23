@@ -2,8 +2,28 @@
 {% load angularjs %}
 {% load staticfiles %}
 {% block 'content' %}
-h2 {{vote.name}}
-| {{vote.startMethod}}
-| {{vote.endMethod}}
+script(typ="text/javascript",src="{% static 'js/votedetail.js' %}")
+#vote-detail(ng-controller="votedetail")
+  script.
+    var voteid = '{{vote.pk}}';
+  div(style="position:absolute;text-align:right;right:0")
+    .btn.btn-primary(ng-click="settype('verticalBar')") Vertical
+    .btn.btn-primary(ng-click="settype('horizontalBar')") Horizontal
+  svg#vote-chart(preserveAspectRatio="xMidYMid",style="border:1px solid #00")
+  //-svg#vote-chart3(preserveAspectRatio="xMidYMid",style="border:1px solid #000")
+  .vote-title {{vote.name}}
+  .vote-desc {{vote.desc}}
+  h3 候選項目
+  {% for item in vote.plan.all %}
+  .panel.panel-default.vote-item 
+    .panel-heading {{item.name}}
+    .panel-body
+      {% if item.desc %}
+      | {{item.desc}}
+      {% else %}
+      | 這個項目沒有寫描述。
+      {% endif %}
+  {% endfor %}
+    
 {% endblock %}
 
