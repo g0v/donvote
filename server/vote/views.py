@@ -57,3 +57,11 @@ class VoteDetailView(TemplateView):
     context['vote'] = vote[0] if len(vote) else None
     print(vote)
     return context
+
+class VoteListPage(TemplateView):
+  template_name = "vote/list.jade"
+  def get_context_data(self, **kwargs):
+    context = super(VoteListPage, self).get_context_data(**kwargs)
+    vote = Vote.objects.all()
+    context['votes'] = vote
+    return context

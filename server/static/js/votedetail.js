@@ -64,7 +64,7 @@ x$.controller('votedetail', function($scope, $http){
         return this.mb = this.w > 500 && this.data.length < 10 ? 10 : 2;
       },
       render: function(s){
-        var x$, y$, z$, z1$, z2$, this$ = this;
+        var x$, y$, z$, updateText, this$ = this;
         s[0].attr({
           x: function(d, i){
             return this$.xscale(i);
@@ -115,22 +115,28 @@ x$.controller('votedetail', function($scope, $http){
             return d.color;
           }
         });
-        z1$ = this.svg.selectAll('g.text').select('text');
-        z2$ = z1$.transition().duration(1000);
-        z2$.attr({
-          x: function(d, i){
-            return (this$.xscale(i) + this$.xscale(i + 1) - this$.mb) / 2;
-          },
-          y: function(d, i){
-            return this$.yscale(d.count);
-          },
-          "text-anchor": "middle",
-          "dorminant-baseline": "central"
-        });
-        z1$.text(function(d, i){
-          return d.name;
-        });
-        return z1$;
+        this.svg.selectAll('g.text').select('text');
+        updateText = function(it){
+          var x$, y$;
+          x$ = it;
+          y$ = x$.transition().duration(1000);
+          y$.attr({
+            x: function(d, i){
+              return (this$.xscale(i) + this$.xscale(i + 1) - this$.mb) / 2;
+            },
+            y: function(d, i){
+              return this$.yscale(d.count);
+            },
+            "text-anchor": "middle",
+            "dorminant-baseline": "central"
+          });
+          x$.text(function(d, i){
+            return d.name;
+          });
+          return x$;
+        };
+        updateText(this.svg.selectAll('g.text').select('text'));
+        return updateText(this.svg.selectAll('g.text-shadow').select('text'));
       }
     },
     horizontalBar: {
@@ -144,7 +150,7 @@ x$.controller('votedetail', function($scope, $http){
         return this.mb = this.h > 500 && this.data.length < 10 ? 10 : 2;
       },
       render: function(s){
-        var x$, y$, z$, z1$, z2$, this$ = this;
+        var x$, y$, z$, updateText, this$ = this;
         s[0].attr({
           x: function(d, i){
             return this$.xscale.range()[0];
@@ -196,22 +202,27 @@ x$.controller('votedetail', function($scope, $http){
             return d.color;
           }
         });
-        z1$ = this.svg.selectAll('g.text').select('text');
-        z2$ = z1$.transition().duration(1000);
-        z2$.attr({
-          x: function(d, i){
-            return 10;
-          },
-          y: function(d, i){
-            return (this$.yscale(i) + this$.yscale(i + 1) - this$.mb) / 2;
-          },
-          "text-anchor": "left",
-          "dominant-baseline": "central"
-        });
-        z1$.text(function(d, i){
-          return d.name;
-        });
-        return z1$;
+        updateText = function(it){
+          var x$, y$;
+          x$ = it;
+          y$ = x$.transition().duration(1000);
+          y$.attr({
+            x: function(d, i){
+              return 10;
+            },
+            y: function(d, i){
+              return (this$.yscale(i) + this$.yscale(i + 1) - this$.mb) / 2;
+            },
+            "text-anchor": "left",
+            "dominant-baseline": "central"
+          });
+          x$.text(function(d, i){
+            return d.name;
+          });
+          return x$;
+        };
+        updateText(this.svg.selectAll('g.text').select('text'));
+        return updateText(this.svg.selectAll('g.text-shadow').select('text'));
       }
     },
     use: function(choice){
@@ -229,13 +240,13 @@ x$.controller('votedetail', function($scope, $http){
       });
       this.use();
       this.type.scale();
-      s = ['rect', 'text'].map(function(it){
+      s = [['rect', 'rect'], ['text', 'text-shadow'], ['text', 'text']].map(function(it){
         var v;
-        v = this$.svg.selectAll("g." + it).data(this$.data);
+        v = this$.svg.selectAll("g." + it[1]).data(this$.data);
         v.exit().transition().duration(1000).style({
           opacity: 0
         }).remove();
-        return v.enter().append('g').attr('class', it).append(it);
+        return v.enter().append('g').attr('class', it[1]).append(it[0]).attr('class', it[1]);
       });
       return this.type.render(s);
     }

@@ -1,15 +1,96 @@
+@import basic
+@import vars
+
 #vote-detail
   .vote-title
     text-align: center
     padding: 20px
     border:
-      top: 1px solid #999
-      bottom: 1px solid #999
-    font-size: 2.5em
+      top: 5px solid $c5b
+    font-size: 2.3em
     font-weight: 900
-    margin-bottom: 30px
   .vote-desc
     font-size: 1.3em
     letter-spacing: 1px
+    .panel-body
+      white-space: pre-wrap
+      &:before, &:after
+        display: block
+        height: 0
+        overflow: hidden
   .vote-item
-    
+    .panel-heading
+      font-size: 1.3em
+      letter-spacing: 1px
+      font-weight: 900
+      text-shadow: 0 1px 1px rgba(0,0,0,0.2)
+
+  .bl-yellow, .bl-green
+    background-position: 0 0
+    padding-left: 20px
+
+#vote-comment
+  .panel-heading
+    background: none
+    font-weight: 900
+    padding-top: 0
+    padding-bottom: 0
+    height: 42px
+    .btn.btn-link
+      height: 42px
+      border-right: 1px solid #ccc
+      padding-top: 10px
+      padding-bottom: 10px
+      &.green
+        color: #090
+      &.gray
+        color: #999
+      &.red
+        color: #f90
+      i.glyphicon-ok
+        color: #000
+      i.glyphicon-minus
+        color: #999
+        opacity: 0.5
+  .panel-body
+    font-size: 2em
+    color: #999
+
+.vote-post
+  .panel-heading
+    background: none
+    border-bottom: none
+    .avatar
+      width: 64px
+      height: 64px
+      float: left
+      border-radius: 3px
+      background: #ccc
+      margin: 0 10px 0 0
+    .ib
+      float: left
+    .name
+      font-size: 1.8em
+    .target
+      margin-left: 10px
+      font-size: 0.6em
+      display: inline
+      color: #999
+    .desc
+      width: 200px
+      .time
+        vertical-align: middle
+  .panel-body
+    font-size: 1.5em
+    .btn-link
+      padding: 0
+
+text.text
+  fill: #fff
+  font-size: 1.5em
+
+text.text-shadow
+  stroke: #000
+  fill: #000
+  stroke-width: 5px
+  font-size: 1.5em

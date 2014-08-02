@@ -61,14 +61,19 @@ angular.module \donvote
                 y: (d,i) ~> @yscale d.count
                 height: (d,i) ~> (@yscale(0) - @yscale(d.count))>?5
                 fill: (d,i) ~> d.color
+
           @svg.selectAll \g.text .select \text
-            ..transition!duration 1000
-              ..attr do
-                x: (d,i) ~> ( @xscale(i) + @xscale(i + 1) - @mb ) / 2
-                y: (d,i) ~> @yscale d.count
-                "text-anchor": "middle"
-                "dorminant-baseline": "central"
-            ..text (d,i) -> d.name
+          update-text = ~>
+            it
+              ..transition!duration 1000
+                ..attr do
+                  x: (d,i) ~> ( @xscale(i) + @xscale(i + 1) - @mb ) / 2
+                  y: (d,i) ~> @yscale d.count
+                  "text-anchor": "middle"
+                  "dorminant-baseline": "central"
+              ..text (d,i) -> d.name
+          update-text(@svg.selectAll \g.text .select \text)
+          update-text(@svg.selectAll \g.text-shadow .select \text)
 
       horizontal-bar: do
         scale: ->
@@ -98,14 +103,17 @@ angular.module \donvote
                 height: (d,i) ~> 
                   @yscale(i + 1) - @yscale(i) - @mb >? 2
                 fill: (d,i) ~> d.color
-          @svg.selectAll \g.text .select \text
-            ..transition!duration 1000
-              ..attr do
-                x: (d,i) ~> 10 #( @xscale(d.count) ) <? @w
-                y: (d,i) ~> ( @yscale(i) + @yscale(i + 1) - @mb ) / 2
-                "text-anchor": "left"
-                "dominant-baseline": "central"
-            ..text (d,i) -> d.name
+          update-text = ~>
+            it
+              ..transition!duration 1000
+                ..attr do
+                  x: (d,i) ~> 10 #( @xscale(d.count) ) <? @w
+                  y: (d,i) ~> ( @yscale(i) + @yscale(i + 1) - @mb ) / 2
+                  "text-anchor": "left"
+                  "dominant-baseline": "central"
+              ..text (d,i) -> d.name
+          update-text(@svg.selectAll \g.text .select \text)
+          update-text(@svg.selectAll \g.text-shadow .select \text)
       use: (choice)->
         if choice => @choice = choice
         @type = @[@choice] <<< @{w,h,m,dh,color,svg,data}
@@ -119,11 +127,11 @@ angular.module \donvote
         @data.sort (a,b) -> a.count - b.count
         @use!
         @type.scale!
-        s = <[rect text]>map ~>
-          v = @svg.selectAll "g.#it" .data @data
+        s = [<[rect rect]> <[text text-shadow]> <[text text]>]map ~>
+          v = @svg.selectAll "g.#{it.1}" .data @data
           v.exit!transition!duration 1000 .style opacity: 0 .remove!
-          v.enter!append \g .attr \class, it 
-            .append it
+          v.enter!append \g .attr \class, it.1
+            .append it.0 .attr \class, it.1
         @type.render s
 
     pretain-viewbox.register vote-chart

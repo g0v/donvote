@@ -1,0 +1,38 @@
+{% extends 'two-column.jade' %}
+{% load angularjs %}
+{% load staticfiles %}
+{% block 'content' %}
+{% for item in votes %}
+#vote-list
+  .item
+    .thumb
+    a.btn.btn-success(href="/vote/{{item.pk}}") 查看細節
+    .ib
+      .name {{item.name}}
+      .info
+        .btn.btn-link
+          i.glyphicon.glyphicon-user
+          |  由 {{item.owner}} 建立
+        .btn.btn-link
+          i.glyphicon.glyphicon-calendar
+          {% if item.startMethod == '1' %}
+          |  手動開始
+          {% elif item.startMethod == '2' %}
+          |  {{item.startDate.year}}.{{item.startDate.month}}.{{item.startDate.day}}
+          |  {{item.startDate.hour}}:{{item.startDate.minute}} 開始表决
+          {% endif %}
+        .btn.btn-link
+          i.glyphicon.glyphicon-th-list
+          |  {{ item.getPlanCount }} 個方案
+        {% if item.isOngoing %}
+        .label.label-danger 表决中
+        {% endif %}
+      {% if item.desc %}
+      .desc {{item.desc}}
+      {% else %}
+      .desc.disabled ( 沒有描述 ... )
+      {% endif %}
+    .clearfix
+{% endfor %}
+
+{% endblock %}

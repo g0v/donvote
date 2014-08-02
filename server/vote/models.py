@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 from django.db import models
 from donvote import utils
+from datetime import datetime
+from donvote.utils import GMT8
 from django.contrib.auth.models import User, Group
 
 # Create your models here.
@@ -111,6 +113,22 @@ class Vote(WithDateModel):
   validVoteRate = models.FloatField(default=66) # 有效投票率
   useObtainRate = models.BooleanField(default=False) # 最高得票率需高於一定門檻
   obtainRate = models.FloatField(default=30)
+
+  @property
+  def isOngoing(self):
+    now = datetime.now(GMT8())
+    if self.startMethod == '1': return self.ongoing
+    elif self.startMethod == '2': 
+      if now < self.startDate: return False
+      if self.endMethod == '1': return True
+      elif self.endMethod == '2':
+        if now >= self.endDate: return False
+      elif self.endMethod == '3': return False # TODO
+    elif self.startMethod == '3': return False # TODO
+    return False
+  @property
+  def getPlanCount(self):
+    return len(self.plan.all())
 
 class DonableModel(models.Model):
   karma = models.ManyToManyField(Karma,blank=True)
