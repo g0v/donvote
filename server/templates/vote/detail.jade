@@ -18,7 +18,20 @@ script(typ="text/javascript",src="{% static 'js/votedetail.js' %}")
     .panel-body {{vote.desc}}
   br
   .ribbon-yellow 候選項目
+  .btn.btn-link.pull-right(ng-click="togglenewplan=!togglenewplan")
+    i.glyphicon.glyphicon-plus
+      |  我想新增方案
   .bl-yellow
+    .panel.panel-default(ng-show="togglenewplan")
+      form.panel-body
+        .form-group
+          label 方案名稱
+          input.form-control(placeholder="方案名稱，例如：我同意這個提案")
+        .form-group
+          label 方案描述
+          textarea.form-control(placeholder="請詳細描述這個方案的內容")
+        .btn.btn-primary 新增方案
+        .btn.btn-default(ng-click="togglenewplan=!togglenewplan") 取消這個動作
     {% for item in vote.plan.all %}
     .panel.panel-default.vote-item.panel-discuss
       .panel-heading {{item.name}}
