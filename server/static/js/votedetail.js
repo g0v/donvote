@@ -53,6 +53,68 @@ x$.controller('votedetail', function($scope, $http){
     dh: 250,
     name: ['Jody', 'Stanley', 'Harvey', 'Adrienne', 'Antonio', 'Laverne', 'Cesar', 'Ramon', 'Julie', 'Deanna', 'Cristen', 'Sammie'],
     color: d3.scale.category20(),
+    pieChart: {
+      scale: function(r){
+        this.xscale = d3.scale.linear().domain([
+          0, d3.max(this.data.map(function(it){
+            return it.x + it.dx;
+          }))
+        ]).range([0, 2 * Math.PI]);
+        this.yscale = d3.scale.linear().domain([
+          0, d3.max(this.data.map(function(it){
+            return it.count;
+          }))
+        ]).range([0, this.h / 2]);
+        return this.mb = 10;
+      },
+      render: function(s){
+        var arc, x$, y$, this$ = this;
+        console.log("1>", s);
+        arc = d3.svg.arc().startAngle(function(d){
+          return this$.xscale(d.x);
+        }).endAngle(function(d){
+          return this$.xscale(d.x + d.dx);
+        }).innerRadius(function(d){
+          var ref$, ref1$;
+          return ((ref$ = this$.w) < (ref1$ = this$.h) ? ref$ : ref1$) / 4;
+        }).outerRadius(function(d){
+          var ref$, ref1$;
+          return ((ref$ = this$.w) < (ref1$ = this$.h) ? ref$ : ref1$) / 2;
+        });
+        s[0].attr({
+          fill: function(d, i){
+            return d.color;
+          },
+          d: function(d, i){
+            return arc({
+              x: d.x,
+              y: 10,
+              dx: d.dx,
+              dy: 100
+            });
+          }
+        });
+        x$ = this.svg.selectAll('g.path').select('path');
+        y$ = x$.transition().duration(1000);
+        y$.attr({
+          transform: function(){
+            return "translate(" + this$.w / 2 + " " + this$.h / 2 + ")";
+          },
+          fill: function(d, i){
+            return d.color;
+          },
+          d: function(d, i){
+            return arc({
+              x: d.x,
+              y: 10,
+              dx: d.dx,
+              dy: 100
+            });
+          }
+        });
+        return x$;
+      }
+    },
     verticalBar: {
       scale: function(r){
         this.xscale = d3.scale.linear().domain([0, this.data.length]).range([0, this.w]);
@@ -64,52 +126,46 @@ x$.controller('votedetail', function($scope, $http){
         return this.mb = this.w > 500 && this.data.length < 10 ? 10 : 2;
       },
       render: function(s){
-        var x$, y$, z$, updateText, this$ = this;
+        var x$, y$, updateText, this$ = this;
         s[0].attr({
-          x: function(d, i){
-            return this$.xscale(i);
+          d: function(d, i){
+            var ref$, x, y, w, h;
+            ref$ = [this$.xscale(i), this$.yscale.range()[0]], x = ref$[0], y = ref$[1];
+            ref$ = [this$.xscale(i + 1) - this$.xscale(i) - this$.mb, 0], w = ref$[0], h = ref$[1];
+            return "M" + x + "," + y + " L" + (x + w) + "," + y + " L" + (x + w) + "," + (y + h) + ",L" + x + "," + (y + h) + "Z";
           },
-          y: function(d, i){
-            return this$.yscale.range()[0];
-          },
-          width: function(d, i){
-            return this$.xscale(i + 1) - this$.xscale(i) - this$.mb;
-          },
-          height: 0,
           fill: function(d, i){
             return d.color;
           }
         });
-        x$ = s[1];
-        x$.attr({
-          x: function(d, i){
-            return (this$.xscale(i) + this$.xscale(i + 1) - this$.mb) / 2;
-          },
-          y: function(d, i){
-            return this$.yscale.range()[0];
-          },
-          dy: -10,
-          width: 0,
-          height: 0
+        [s[1], s[2]].map(function(it){
+          var x$;
+          x$ = it;
+          x$.attr({
+            x: function(d, i){
+              return (this$.xscale(i) + this$.xscale(i + 1) - this$.mb) / 2;
+            },
+            y: function(d, i){
+              return this$.yscale.range()[0];
+            },
+            dy: -10,
+            width: 0,
+            height: 0
+          });
+          x$.text(function(it){
+            return it.name;
+          });
+          return x$;
         });
-        x$.text(function(it){
-          return it.name;
-        });
-        y$ = this.svg.selectAll('g.rect').select('rect');
-        z$ = y$.transition().duration(1000);
-        z$.attr({
-          x: function(d, i){
-            return this$.xscale(i);
-          },
-          width: function(d, i){
-            return this$.xscale(i + 1) - this$.xscale(i) - this$.mb;
-          },
-          y: function(d, i){
-            return this$.yscale(d.count);
-          },
-          height: function(d, i){
-            var ref$;
-            return (ref$ = this$.yscale(0) - this$.yscale(d.count)) > 5 ? ref$ : 5;
+        x$ = this.svg.selectAll('g.path').select('path');
+        y$ = x$.transition().duration(1000);
+        y$.attr({
+          transform: "",
+          d: function(d, i){
+            var ref$, x, y, w, h;
+            ref$ = [this$.xscale(i), this$.yscale(d.count)], x = ref$[0], y = ref$[1];
+            ref$ = [this$.xscale(i + 1) - this$.xscale(i) - this$.mb, (ref$ = this$.yscale(0) - this$.yscale(d.count)) > 5 ? ref$ : 5], w = ref$[0], h = ref$[1];
+            return "M" + x + "," + y + " L" + (x + w) + "," + y + " L" + (x + w) + "," + (y + h) + ",L" + x + "," + (y + h) + "Z";
           },
           fill: function(d, i){
             return d.color;
@@ -150,53 +206,45 @@ x$.controller('votedetail', function($scope, $http){
         return this.mb = this.h > 500 && this.data.length < 10 ? 10 : 2;
       },
       render: function(s){
-        var x$, y$, z$, updateText, this$ = this;
+        var x$, y$, updateText, this$ = this;
         s[0].attr({
-          x: function(d, i){
-            return this$.xscale.range()[0];
-          },
-          y: function(d, i){
-            return this$.yscale(i);
-          },
-          width: 0,
-          height: function(d, i){
-            var ref$;
-            return (ref$ = this$.yscale(i + 1) - this$.yscale(i) - this$.mb) > 0 ? ref$ : 0;
+          d: function(d, i){
+            var ref$, x, y, w, h;
+            ref$ = [this$.xscale.range()[0], this$.yscale(i)], x = ref$[0], y = ref$[1];
+            ref$ = [0, (ref$ = this$.yscale(i + 1) - this$.yscale(i) - this$.mb) > 0 ? ref$ : 0], w = ref$[0], h = ref$[1];
+            return "M" + x + "," + y + " L" + (x + w) + "," + y + " L" + (x + w) + "," + (y + h) + ",L" + x + "," + (y + h) + "Z";
           },
           fill: function(d, i){
             return d.color;
           }
         });
-        x$ = s[1];
-        x$.attr({
-          x: function(d, i){
-            return this$.xscale.range()[0];
-          },
-          y: function(d, i){
-            return (this$.yscale(i) + this$.yscale(i + 1) - this$.mb) / 2;
-          },
-          width: 0,
-          height: 0
+        [s[1], s[2]].map(function(it){
+          var x$;
+          x$ = it;
+          x$.attr({
+            x: function(d, i){
+              return this$.xscale.range()[0];
+            },
+            y: function(d, i){
+              return (this$.yscale(i) + this$.yscale(i + 1) - this$.mb) / 2;
+            },
+            width: 0,
+            height: 0
+          });
+          x$.text(function(it){
+            return it.name;
+          });
+          return x$;
         });
-        x$.text(function(it){
-          return it.name;
-        });
-        y$ = this.svg.selectAll('g.rect').select('rect');
-        z$ = y$.transition().duration(1000);
-        z$.attr({
-          x: function(d, i){
-            return this$.xscale.range()[0];
-          },
-          width: function(d, i){
-            var ref$;
-            return (ref$ = this$.xscale(d.count) - this$.xscale(0)) > 5 ? ref$ : 5;
-          },
-          y: function(d, i){
-            return this$.yscale(i);
-          },
-          height: function(d, i){
-            var ref$;
-            return (ref$ = this$.yscale(i + 1) - this$.yscale(i) - this$.mb) > 2 ? ref$ : 2;
+        x$ = this.svg.selectAll('g.path').select('path');
+        y$ = x$.transition().duration(1000);
+        y$.attr({
+          transform: "",
+          d: function(d, i){
+            var ref$, x, y, w, h;
+            ref$ = [this$.xscale.range()[0], this$.yscale(i)], x = ref$[0], y = ref$[1];
+            ref$ = [(ref$ = this$.xscale(d.count) - this$.xscale(0)) > 5 ? ref$ : 5, (ref$ = this$.yscale(i + 1) - this$.yscale(i) - this$.mb) > 2 ? ref$ : 2], w = ref$[0], h = ref$[1];
+            return "M" + x + "," + y + " L" + (x + w) + "," + y + " L" + (x + w) + "," + (y + h) + ",L" + x + "," + (y + h) + "Z";
           },
           fill: function(d, i){
             return d.color;
@@ -234,19 +282,25 @@ x$.controller('votedetail', function($scope, $http){
     },
     choice: 'horizontalBar',
     render: function(){
-      var s, this$ = this;
+      var s, count, this$ = this;
       this.data.sort(function(a, b){
         return a.count - b.count;
       });
       this.use();
       this.type.scale();
-      s = [['rect', 'rect'], ['text', 'text-shadow'], ['text', 'text']].map(function(it){
+      s = [['path', 'path'], ['text', 'text-shadow'], ['text', 'text']].map(function(it){
         var v;
         v = this$.svg.selectAll("g." + it[1]).data(this$.data);
         v.exit().transition().duration(1000).style({
           opacity: 0
         }).remove();
         return v.enter().append('g').attr('class', it[1]).append(it[0]).attr('class', it[1]);
+      });
+      count = 0;
+      this.svg.selectAll("g.path").select("path").each(function(d, i){
+        d.x = count;
+        d.dx = d.count;
+        return count = count + d.count;
       });
       return this.type.render(s);
     }

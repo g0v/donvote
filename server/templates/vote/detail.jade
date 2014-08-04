@@ -9,13 +9,29 @@ script(typ="text/javascript",src="{% static 'js/votedetail.js' %}")
   div(style="position:absolute;text-align:right;right:0")
     .btn.btn-primary(ng-click="settype('verticalBar')") Vertical
     .btn.btn-primary(ng-click="settype('horizontalBar')") Horizontal
+    .btn.btn-primary(ng-click="settype('pieChart')") Pie Chart
   svg#vote-chart(preserveAspectRatio="xMidYMid",style="border:1px solid #00")
   //-svg#vote-chart3(preserveAspectRatio="xMidYMid",style="border:1px solid #000")
   .vote-title {{vote.name}}
-  .ribbon 說明
+  .vote-brief.text-center
+    .prop
+      i.glyphicon.glyphicon-calendar
+      |  表决時間從 2014.7.2 12:00 到 2014.8.2 12:00 止 
+    .prop
+      i.glyphicon.glyphicon-th-list
+      |  共 5 個方案，多選式表决 
+    .prop
+      i.glyphicon.glyphicon-exclamation-sign
+      |  投票率門檻 75%
+  br
+  .ribbon-red 說明
   //-.vote-desc {{vote.desc}}
   .panel.panel-default.vote-desc
     .panel-body {{vote.desc}}
+  br
+  .ribbon-orange 提案細節
+  .bl-orange
+    | 提案細節，例如：票選方式、開始結束條件、有效條件等等
   br
   .ribbon-yellow 候選項目
   .btn.btn-link.pull-right(ng-click="togglenewplan=!togglenewplan")
@@ -97,6 +113,16 @@ script(typ="text/javascript",src="{% static 'js/votedetail.js' %}")
           |  反對
         .btn.btn-link.pull-right
           |  回覆
+      .panel-body.reply
+        .row
+          .col-sm-1(style="width: 42px")
+            .avatar
+          .col-sm-10
+            .name Kirby Wu
+            .desc
+              span.time 六分鐘前
+              br
+              | 這是一個簡單測試用的回覆
 
 {% endblock %}
 
