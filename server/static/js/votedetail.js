@@ -68,8 +68,9 @@ x$.controller('votedetail', function($scope, $http){
         return this.mb = 10;
       },
       render: function(s){
-        var arc, x$, y$, this$ = this;
+        var ref$, r1, r2, arc, norm, x$, updateText, this$ = this;
         console.log("1>", s);
+        ref$ = [30, 200], r1 = ref$[0], r2 = ref$[1];
         arc = d3.svg.arc().startAngle(function(d){
           return this$.xscale(d.x);
         }).endAngle(function(d){
@@ -81,6 +82,11 @@ x$.controller('votedetail', function($scope, $http){
           var ref$, ref1$;
           return ((ref$ = this$.w) < (ref1$ = this$.h) ? ref$ : ref1$) / 2;
         });
+        norm = function(d){
+          return d.map(function(it){
+            return it / Math.sqrt(Math.pow(d[0], 2) + Math.pow(d[1], 2));
+          });
+        };
         s[0].attr({
           fill: function(d, i){
             return d.color;
@@ -95,14 +101,28 @@ x$.controller('votedetail', function($scope, $http){
           }
         });
         x$ = this.svg.selectAll('g.path').select('path');
-        y$ = x$.transition().duration(1000);
-        y$.attr({
+        x$.attr({
           transform: function(){
             return "translate(" + this$.w / 2 + " " + this$.h / 2 + ")";
           },
           fill: function(d, i){
             return d.color;
           },
+          stroke: function(d, i){
+            if (i === 0) {
+              return "rgba(255,0,0,1)";
+            }
+            if (i === 1) {
+              return "rgba(0,255,0,1)";
+            }
+            if (i === 2) {
+              return "rgba(0,0,255,1)";
+            }
+            if (i === 3) {
+              return "rgba(255,0,255,1)";
+            }
+          },
+          "stroke-width": 1,
           d: function(d, i){
             return arc({
               x: d.x,
@@ -112,7 +132,31 @@ x$.controller('votedetail', function($scope, $http){
             });
           }
         });
-        return x$;
+        this.svg.selectAll('g.text').select('text');
+        updateText = function(it){
+          var x$, y$;
+          x$ = it;
+          y$ = x$.transition().duration(1000);
+          y$.attr({
+            transform: function(){
+              return "translate(" + this$.w / 2 + " " + this$.h / 2 + ")";
+            },
+            x: function(d, i){
+              return Math.sin(this$.xscale(d.x + d.dx / 2)) * r2;
+            },
+            y: function(d, i){
+              return -Math.cos(this$.xscale(d.x + d.dx / 2)) * r2;
+            },
+            "text-anchor": "middle",
+            "dorminant-baseline": "central"
+          });
+          x$.text(function(d, i){
+            return d.name;
+          });
+          return x$;
+        };
+        updateText(this.svg.selectAll('g.text').select('text'));
+        return updateText(this.svg.selectAll('g.text-shadow').select('text'));
       }
     },
     verticalBar: {
@@ -128,6 +172,7 @@ x$.controller('votedetail', function($scope, $http){
       render: function(s){
         var x$, y$, updateText, this$ = this;
         s[0].attr({
+          transform: "",
           d: function(d, i){
             var ref$, x, y, w, h;
             ref$ = [this$.xscale(i), this$.yscale.range()[0]], x = ref$[0], y = ref$[1];
@@ -142,6 +187,7 @@ x$.controller('votedetail', function($scope, $http){
           var x$;
           x$ = it;
           x$.attr({
+            transform: "",
             x: function(d, i){
               return (this$.xscale(i) + this$.xscale(i + 1) - this$.mb) / 2;
             },
@@ -177,6 +223,7 @@ x$.controller('votedetail', function($scope, $http){
           x$ = it;
           y$ = x$.transition().duration(1000);
           y$.attr({
+            transform: "",
             x: function(d, i){
               return (this$.xscale(i) + this$.xscale(i + 1) - this$.mb) / 2;
             },
@@ -208,6 +255,7 @@ x$.controller('votedetail', function($scope, $http){
       render: function(s){
         var x$, y$, updateText, this$ = this;
         s[0].attr({
+          transform: "",
           d: function(d, i){
             var ref$, x, y, w, h;
             ref$ = [this$.xscale.range()[0], this$.yscale(i)], x = ref$[0], y = ref$[1];
@@ -222,6 +270,7 @@ x$.controller('votedetail', function($scope, $http){
           var x$;
           x$ = it;
           x$.attr({
+            transform: "",
             x: function(d, i){
               return this$.xscale.range()[0];
             },
@@ -255,6 +304,7 @@ x$.controller('votedetail', function($scope, $http){
           x$ = it;
           y$ = x$.transition().duration(1000);
           y$.attr({
+            transform: "",
             x: function(d, i){
               return 10;
             },

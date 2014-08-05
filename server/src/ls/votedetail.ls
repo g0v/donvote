@@ -40,21 +40,43 @@ angular.module \donvote
           @mb = 10
         render: (s) ->
           console.log "1>", s
+          [r1,r2] = [30,200]
           arc = d3.svg.arc!
             .startAngle (d) ~> @xscale d.x
             .endAngle (d) ~> @xscale d.x + d.dx
             .innerRadius (d) ~> ( @w <? @h ) / 4
             .outerRadius (d) ~> ( @w <? @h ) / 2
 
+          norm = (d) -> d.map ->  it / Math.sqrt( d.0 ** 2 + d.1 **2 )
           s.0.attr do
             fill: (d,i) -> d.color
             d: (d,i) ~> arc {x: d.x,y: 10,dx: d.dx,dy: 100}
           @svg.selectAll \g.path .select \path
-            ..transition!duration 1000
+            #..transition!duration 1000
               ..attr do
                 transform: ~> "translate(#{@w/2} #{@h/2})"
                 fill: (d,i) -> d.color
+                stroke: (d,i)-> 
+                  if i == 0 => return "rgba(255,0,0,1)"
+                  if i == 1 => return "rgba(0,255,0,1)"
+                  if i == 2 => return "rgba(0,0,255,1)"
+                  if i == 3 => return "rgba(255,0,255,1)"
+                "stroke-width": 1
                 d: (d,i) ~> arc {x: d.x,y: 10,dx: d.dx,dy: 100}
+
+          @svg.selectAll \g.text .select \text
+          update-text = ~>
+            it
+              ..transition!duration 1000
+                ..attr do
+                  transform: ~> "translate(#{@w/2} #{@h/2})"
+                  x: (d,i) ~> Math.sin(@xscale(d.x + d.dx/2)) * ( r2 ) 
+                  y: (d,i) ~> -Math.cos(@xscale(d.x + d.dx/2)) * ( r2 )
+                  "text-anchor": "middle"
+                  "dorminant-baseline": "central"
+              ..text (d,i) -> d.name
+          update-text(@svg.selectAll \g.text .select \text)
+          update-text(@svg.selectAll \g.text-shadow .select \text)
 
       vertical-bar: do
         scale: (r) ->
@@ -63,6 +85,7 @@ angular.module \donvote
           @mb = if @w > 500 and @data.length < 10 => 10 else 2
         render: (s) ->
           s.0.attr do
+            transform: ""
             d: (d,i) ~>
               [x,y] = [@xscale(i), @yscale.range!0]
               [w,h] = [@xscale(i + 1) - @xscale(i) - @mb, 0]
@@ -70,6 +93,7 @@ angular.module \donvote
             fill: (d,i) -> d.color
           [s.1, s.2].map ~> it
             ..attr do
+              transform: ""
               x: (d,i) ~> ( @xscale(i) + @xscale(i + 1) - @mb ) / 2
               y: (d,i) ~> @yscale.range!0
               dy: -10
@@ -91,6 +115,7 @@ angular.module \donvote
             it
               ..transition!duration 1000
                 ..attr do
+                  transform: ""
                   x: (d,i) ~> ( @xscale(i) + @xscale(i + 1) - @mb ) / 2
                   y: (d,i) ~> @yscale d.count
                   "text-anchor": "middle"
@@ -106,6 +131,7 @@ angular.module \donvote
           @mb = if @h > 500 and @data.length < 10 => 10 else 2
         render: (s) ->
           s.0.attr do
+            transform: ""
             d: (d,i) ~>
               [x,y] = [@xscale.range!0, @yscale(i)]
               [w,h] = [0, (@yscale(i + 1) - @yscale(i) - @mb) >? 0]
@@ -113,6 +139,7 @@ angular.module \donvote
             fill: (d,i) -> d.color
           [s.1, s.2].map ~> it
             ..attr do
+              transform: ""
               x: (d,i) ~> @xscale.range!0
               y: (d,i) ~> ( @yscale(i) + @yscale(i + 1) - @mb ) / 2
               width: 0
@@ -131,6 +158,7 @@ angular.module \donvote
             it
               ..transition!duration 1000
                 ..attr do
+                  transform: ""
                   x: (d,i) ~> 10 #( @xscale(d.count) ) <? @w
                   y: (d,i) ~> ( @yscale(i) + @yscale(i + 1) - @mb ) / 2
                   "text-anchor": "left"
