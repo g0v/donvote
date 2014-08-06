@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User
-from .models import Vote, Plan, Discuss
+from .models import Vote, Plan, Discuss, Karma, Ballot
 import json
 
 class PlanField(serializers.RelatedField):
@@ -35,11 +35,25 @@ class PlanSerializer(serializers.ModelSerializer):
     model = Plan
     field = (  'owner', 'karma', 'discuss', 'createDate', 'modifyDate', 'name', 'desc')
 
+class KarmaSerializer(serializers.ModelSerializer):
+  owner = serializers.Field(source='owner.username')
+  class Meta:
+    model = Karma
+    field = (  'value'  )
+
 class DiscussSerializer(serializers.ModelSerializer):
   owner = serializers.Field(source='owner.username')
   class Meta:
     model = Discuss
     field = (  'owner', 'karma', 'createDate', 'modifyDate', 'content')
+
+class BallotSerializer(serializers.ModelSerializer):
+  owner = serializers.Field(source='owner.username')
+  vote = serializers.PrimaryKeyRelatedField()
+  plan = serializers.PrimaryKeyRelatedField()
+  class Meta:
+    model = Ballot
+    field = ( 'owner', 'plan', 'vote', 'createDate', 'modifyDate' )
 
 class VoteSerializer(serializers.ModelSerializer):
   owner = serializers.Field(source='owner.username')

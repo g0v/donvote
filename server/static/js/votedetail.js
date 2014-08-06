@@ -360,10 +360,33 @@ x$.controller('votedetail', function($scope, $http){
     voteChart.use(it);
     return voteChart.render();
   };
+  $scope.comment = {
+    'new': {
+      submit: function(){
+        return $http({
+          url: "/api/vote/" + voteid + "/discuss/",
+          method: 'POST',
+          data: JSON.stringify(this.d)
+        }).success(function(d){
+          return console.log("success:", d);
+        }).error(function(d){
+          return console.log("success:", d);
+        });
+      },
+      reset: function(){
+        return this.d = {};
+      },
+      setPoint: function(it){
+        return this.d.point = it;
+      },
+      d: {}
+    }
+  };
   return $http({
     url: "/api/vote/" + voteid + "/",
     method: 'GET'
   }).success(function(d){
+    $scope.vote = d;
     console.log(d);
     voteChart.data = d.plan;
     d.plan.map(function(it){

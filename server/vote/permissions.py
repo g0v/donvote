@@ -1,5 +1,6 @@
 from rest_framework import permissions
 from django.contrib.auth.models import User
+from .models import Vote
 
 class IsOwnerOrReadOnly(permissions.BasePermission):
   def has_object_permission(self, request, view, obj):
@@ -11,11 +12,10 @@ class PlanPermission(permissions.BasePermission):
   def has_permission(self, request, view):
     return True
 
-
 class VotePermission(permissions.BasePermission):
   def compare(self, src, des):
     src = map(lambda x: x.id, src)
-    des = map(lambda x: x.get("id" or -1), des)
+    des = map(lambda x: x.get("id") or -1, des)
     for item in des: 
       if not (item in src): return False
     return True
@@ -24,9 +24,12 @@ class VotePermission(permissions.BasePermission):
     if request.method in permissions.SAFE_METHODS:
       return True
     for k in request.DATA:
+      print(k)
       try: src = getattr(obj,k)
       except: continue
+      print(src)
       des = request.DATA[k]
+      print(des)
       if type(src) == User:
         result = True if src.username==des else False
       elif str(type(src)).startswith("<class 'django.db.models.fields.related.ManyRelatedManager'>"):

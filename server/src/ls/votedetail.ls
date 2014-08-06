@@ -194,10 +194,30 @@ angular.module \donvote
     $scope.settype = ->
       vote-chart.use it
       vote-chart.render!
+    $scope.comment = do
+      new: do
+        submit: ->
+          $http do
+            url: "/api/vote/#{voteid}/discuss/"
+            method: \POST
+            data: JSON.stringify(@d)
+          .success (d) -> console.log "success:", d
+          .error (d) -> console.log "success:", d
+          /*$http do
+            url: "/api/vote/#{voteid}/"
+            method: \PUT
+            data: JSON.stringify({name: $scope.vote.name, karma: $scope.vote.karma, discuss: $scope.vote.discuss ++ [@d]})
+          .success (d) -> console.log "success. ", d
+          .error (d) -> console.log "failed. ", d*/
+        reset: -> @d = {}
+        setPoint: -> @d.point = it
+        d: {}
+
     $http do
      url: "/api/vote/#{voteid}/"
      method: \GET
     .success (d) ->
+      $scope.vote = d
       console.log d
       vote-chart.data = d.plan
       d.plan.map -> 

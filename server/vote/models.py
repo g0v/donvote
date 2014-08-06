@@ -141,7 +141,8 @@ class Proposal(DonableModel):
   title = models.CharField(max_length=100)
   desc = models.TextField(blank=True)
 
-class Ballot(models.Model):
+class Ballot(WithDateModel):
   owner = models.ForeignKey('auth.User', related_name="ballot")
-  plan = models.ForeignKey('Plan', related_name="ticket")
-  vote = models.ForeignKey('Vote', related_name="ticket")
+  plan = models.ForeignKey('Plan', related_name="ballot", blank=True, null=True)
+  vote = models.ForeignKey('Vote', related_name="ballot")
+  value = models.PositiveIntegerField(default=0)

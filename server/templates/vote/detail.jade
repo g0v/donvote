@@ -66,24 +66,56 @@ script(typ="text/javascript",src="{% static 'js/votedetail.js' %}")
         .btn.btn-link
           i.glyphicon.glyphicon-comment
           |  發表意見 
-        .btn.btn-link.green
+        .btn.btn-link.green(ng-click="comment.new.setPoint(1)")
           i.glyphicon.glyphicon-thumbs-up
           |  正方意見
           i.glyphicon.glyphicon-ok
-        .btn.btn-link.gray
+        .btn.btn-link.gray(ng-click="comment.new.setPoint(2)")
           i.glyphicon.glyphicon-adjust
           |  中立意見
           i.glyphicon.glyphicon-minus
-        .btn.btn-link.red
+        .btn.btn-link.red(ng-click="comment.new.setPoint(3)")
           i.glyphicon.glyphicon-thumbs-down
           |  反方意見
           i.glyphicon.glyphicon-minus
         .clearfix
       .panel-body
-        | 想討論什麼？
+        textarea(ng-model="comment.new.d.content",placeholder="想討論什麼？")
       .panel-footer
-        .btn.btn-primary.pull-right 發言
+        .btn.btn-primary.pull-right(ng-click="comment.new.submit()") 發言
         .clearfix
+    {% for discuss in vote.discuss.all %}
+    .panel.panel-default.vote-post
+      .panel-heading
+        .avatar
+        .ib
+          .name
+            | {{discuss.owner}}
+            .target
+              i.glyphicon.glyphicon-arrow-right
+              |  Admin : " 大家來測試一下... "
+          .desc
+            span.time {{discuss.createDate}}
+            span.label.label-success
+              i.glyphicon.glyphicon-thumbs-up
+              |  支持
+        .clearfix
+      .panel-body
+        | {{discuss.content}}
+      .panel-footer
+        .btn.btn-link 
+          i.glyphicon.glyphicon-thumbs-up
+          |  支持
+        .btn.btn-link 
+          i.glyphicon.glyphicon-hand-right
+          |  中立
+        .btn.btn-link
+          i.glyphicon.glyphicon-thumbs-down
+          |  反對
+        .btn.btn-link.pull-right
+          |  回覆
+    {% endfor %}
+
     .panel.panel-default.vote-post
       .panel-heading
         .avatar
@@ -113,6 +145,7 @@ script(typ="text/javascript",src="{% static 'js/votedetail.js' %}")
           |  反對
         .btn.btn-link.pull-right
           |  回覆
+
       .panel-body.reply
         .row
           .col-sm-1(style="width: 42px")
