@@ -1,7 +1,7 @@
 {% load staticfiles %}
 doctype html
 //- basic libraries: jquery(1.10.2), d3js(3.3.11), angularjs(1.2.3), bootstrap(3.0)/semantic-ui(0.9.3/0.9.5)
-- var usecdn = true
+- var usecdn = false
 - var useog = false
 - var lib_jquery = true
 - var lib_d3js = true
@@ -49,11 +49,13 @@ html(lang="en")
           li
             .round-icon: i.glyphicon.glyphicon-bell
           //li.sep-left
-          li.sep-right.sep-left
-            a.nav-user(href="#")
+          li.sep-right.sep-left.dropdown
+            a.nav-user.dropdown-toggle(href="#",data-toggle="dropdown")
               img.avatar(src="http://graph.facebook.com/{{request.user.username}}/picture")
               | {{request.user.username}}
               b.caret
+            ul.dropdown-menu
+              li: a(href="/accounts/logout/") 登出
           {% else %}
           li: a(href="/accounts/login/") 登入
           li: a(href="/accounts/signup/") 註冊

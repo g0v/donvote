@@ -194,6 +194,7 @@ angular.module \donvote
     $scope.settype = ->
       vote-chart.use it
       vote-chart.render!
+
     $scope.comment = do
       new: do
         submit: ->

@@ -1,0 +1,25 @@
+{% extends 'two-column.jade' %}
+{% load angularjs %}
+{% load staticfiles %}
+{% block 'content' %}
+
+h3 {{group.name}}
+p {{group.desc}}
+h4 成員
+{% for member in group.members.user.all %}
+{{ member.username }}
+{% endfor %}
+
+h4 投票案
+{% for vote in group.vote.all %}
+a(href="/vote/{{vote.pk}}/") {{ vote.name }}
+{% endfor %}
+a(href="/group/{{group.pk}}/vote/new") 新增投票案
+
+br
+br
+
+{% with item=group %}
+{% include 'discuss/list.jade' %}
+{% endwith %}
+{% endblock %}

@@ -40,6 +40,7 @@ INSTALLED_APPS = (
     'django.contrib.sites',
     'account',
     'vote',
+    'addon',
     'south',
     'rest_framework',
     'allauth',
