@@ -2,18 +2,20 @@
 {% load angularjs %}
 {% load staticfiles %}
 {% block 'content' %}
-h3 新增群組
-br
-.form
-  .form-group
-    label 群組名稱
-    input.form-control(type="text",ng-model="group.name",placeholder="群組名稱，例如：新世代青年打拼聯盟")
-  .form-group
-    label 群組描述
-    textarea.form-control(type="text",ng-model="group.desc",placeholder="請于此詳細描述這個群組")
-  .form-group
-    label 群組成員
-    input.form-control(type="text")
-  hr
-  .btn.btn-primary.btn-block.btn-lg 建立群組
+script(type="text/javascript",src="/s/js/newgroup.js")
+div(ng-controller="group")
+  h3 新增群組
+  br
+  .form
+    .form-group
+      label 群組名稱
+      input.form-control(type="text",ng-model="group.name",placeholder="群組名稱，例如：新世代青年打拼聯盟")
+    .form-group
+      label 群組描述
+      textarea.form-control(type="text",ng-model="group.desc",placeholder="請于此詳細描述這個群組")
+    .form-group
+      label 群組成員
+      input.form-control(type="text")
+    hr
+    .btn.btn-primary.btn-block.btn-lg(ng-click="submit()") 建立群組
 {% endblock %}

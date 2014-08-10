@@ -17,7 +17,7 @@ class WorkGroup(models.Model):
   karma = models.ManyToManyField(Karma,blank=True)
   discuss = models.ManyToManyField(Discuss,blank=True)
   vote = models.ManyToManyField(Vote, blank=True)
-  members = models.ForeignKey(NameList, related_name = "workgroup")
+  members = models.ForeignKey(NameList, related_name = "workgroup", blank=True)
   def __unicode__(self):
     return "Group: " + self.name
 

@@ -5,6 +5,7 @@ urlpatterns = patterns('account.views',
     url(r'^api/user/$', views.UserProfileList.as_view()),
     url(r'^api/user/(?P<pk>[0-9]+)/$', views.UserProfileDetail.as_view()),
     url(r'^api/group/$', views.WorkGroupList.as_view()),
+    url(r'^api/group/new/$', views.WorkGroupList.as_view()),
     url(r'^api/group/(?P<pk>[0-9]+)/$', views.WorkGroupDetail.as_view()),
     url(r'^api/group/(?P<discuss_owner_pk>[0-9]+)/discuss/$', views.WorkGroupSubDiscussList.as_view(),name="group_discuss_api"),
 
