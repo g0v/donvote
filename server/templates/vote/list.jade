@@ -24,9 +24,7 @@
         .btn.btn-link
           i.glyphicon.glyphicon-th-list
           |  {{ item.getPlanCount }} 個方案
-        {% if item.isOngoing %}
-        .label.label-danger 表决中
-        {% endif %}
+        {% include 'vote/isOnGoing.jade' %}
       {% if item.desc %}
       .desc {{item.desc}}
       {% else %}

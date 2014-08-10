@@ -1,0 +1,11 @@
+{% if item.isOnGoing == '0' %}
+.label.label-default 表决尚未開始
+{% elif item.isOnGoing == '1' %}
+.label.label-warning 表决即將開始
+{% elif item.isOnGoing == '2' %}
+.label.label-danger 表决中
+{% elif item.isOnGoing == '3' %}
+.label.label-danger 表决中 
+{% elif item.isOnGoing == '4' %}
+.label.label-default 表决已結束
+{% endif %}

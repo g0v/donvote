@@ -125,7 +125,24 @@ x$.controller('newvote', function($scope, $timeout, $http){
     });
   };
   $scope.state = 1;
-  return $scope.newvote = function(v){
+  $scope.editvote = function(v){
+    $scope.state = 2;
+    return $http({
+      url: "/api/vote/" + voteid + "/",
+      method: 'PUT',
+      data: JSON.stringify($scope.vote)
+    }).success(function(d){
+      return $timeout(function(){
+        $scope.state = 3;
+        return $timeout(function(){
+          return $scope.state = 1;
+        }, 4000);
+      }, 2000);
+    }).error(function(e){
+      return console.error(e);
+    });
+  };
+  $scope.newvote = function(v){
     $scope.state = 2;
     return $http({
       url: '/api/vote/',
@@ -143,6 +160,19 @@ x$.controller('newvote', function($scope, $timeout, $http){
       return console.error(e);
     });
   };
+  if (typeof voteid != 'undefined' && voteid !== null) {
+    return $timeout(function(){
+      return $http({
+        url: '/api/vote/1',
+        method: 'GET'
+      }).success(function(d){
+        console.log(d);
+        $scope.custom.time = true;
+        $scope.custom.plan = true;
+        return $scope.vote = d;
+      });
+    }, 2000);
+  }
 });
 function import$(obj, src){
   var own = {}.hasOwnProperty;

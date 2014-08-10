@@ -382,6 +382,54 @@ x$.controller('votedetail', function($scope, $http){
       d: {}
     }
   };
+  $scope.toggleballot = function(plan){
+    return $http({
+      url: "/api/vote/" + voteid + "/plan/" + plan.id + "/ballot/",
+      method: 'GET'
+    }).success(function(d){
+      if (d.length) {
+        return $http({
+          url: "/api/vote/" + voteid + "/plan/" + plan.id + "/ballot/",
+          method: 'DELETE'
+        }).success(function(d){
+          return console.log(d);
+        }).error(function(d){
+          return console.log(e);
+        });
+      } else {
+        return $http({
+          url: "/api/vote/" + voteid + "/plan/" + plan.id + "/ballot/",
+          method: 'POST'
+        }).success(function(d){
+          return console.log(d);
+        }).error(function(d){
+          return console.log(e);
+        });
+      }
+    });
+  };
+  $scope.accordion = {};
+  $scope.newplan = {
+    d: {},
+    submit: function(){
+      var this$ = this;
+      if (!this.d.name) {
+        return;
+      }
+      return $http({
+        url: "/api/vote/" + voteid + "/plan/",
+        method: 'POST',
+        data: JSON.stringify(this.d)
+      }).success(function(e){
+        var ref$;
+        (ref$ = $scope.vote).plan = ref$.plan.concat([e]);
+        voteChart.data = $scope.vote.plan;
+        return voteChart.render();
+      }).error(function(e){
+        return console.error(e);
+      });
+    }
+  };
   return $http({
     url: "/api/vote/" + voteid + "/",
     method: 'GET'

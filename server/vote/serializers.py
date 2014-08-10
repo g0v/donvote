@@ -6,7 +6,7 @@ import json
 class PlanField(serializers.RelatedField):
   read_only = False
   def to_native(self, value):
-    return {"id": value.pk, "name": value.name}
+    return {"id": value.pk, "name": value.name, "desc": value.desc}
   def from_native(self, data):
     p = Plan.objects.filter(pk=data.get("id") or -1)
     if len(p) > 0: return p[0]

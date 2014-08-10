@@ -213,6 +213,38 @@ angular.module \donvote
         setPoint: -> @d.point = it
         d: {}
 
+    $scope.toggleballot = (plan) ->
+      $http do
+        url: "/api/vote/#{voteid}/plan/#{plan.id}/ballot/"
+        method: \GET
+      .success (d) ->
+        if d.length =>
+          $http do
+            url: "/api/vote/#{voteid}/plan/#{plan.id}/ballot/"
+            method: \DELETE
+          .success (d) -> console.log d
+          .error (d) -> console.log e
+        else
+          $http do
+            url: "/api/vote/#{voteid}/plan/#{plan.id}/ballot/"
+            method: \POST
+          .success (d) -> console.log d
+          .error (d) -> console.log e
+
+    $scope.accordion = {}
+    $scope.newplan = do
+      d: {}
+      submit: ->
+        if !@d.name => return
+        $http do
+          url: "/api/vote/#{voteid}/plan/"
+          method: \POST
+          data: JSON.stringify(@d)
+        .success (e) ~>
+          $scope.vote.plan ++= [e]
+          vote-chart.data = $scope.vote.plan
+          vote-chart.render!
+        .error (e) -> console.error e
     $http do
      url: "/api/vote/#{voteid}/"
      method: \GET

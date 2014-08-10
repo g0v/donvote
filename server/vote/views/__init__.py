@@ -168,9 +168,6 @@ class BallotView(View):
     b = Ballot.objects.create(vote=objs[0],plan=objs[1],owner=request.user,value=0)
     return HttpResponse()
 
-  #def dispatch(self, request, *args, **kwargs):
-  #  return super(BallotView, self).dispatch(request, *args, **kwargs)
-
   def delete(self, request, *args, **kwargs): 
     objs = self.prepare(request, *args, **kwargs)
     if objs[2]: objs[2].delete()
@@ -190,3 +187,19 @@ class VoteSubBallotList(BallotList):
       return HttpResponseNotAllowed("new plan is only allowed from owner")
     return super(VoteSubPlanList, self).post(request, *args, **kwargs)
 
+class VoteNewView(TemplateView):
+  template_name = "vote/edit.jade"
+  def get_context_data(self, **kwargs):
+    context = super(VoteDetailView, self).get_context_data(**kwargs)
+    vote = Vote.objects.filter(pk=kwargs['pk'])
+    context['vote'] = vote[0] if len(vote) else None
+    return context
+
+class VoteEditView(TemplateView):
+  template_name = "vote/edit.jade"
+  def get_context_data(self, **kwargs):
+    context = super(VoteEditView, self).get_context_data(**kwargs)
+    if not kwargs.get("pk"): return context
+    vote = Vote.objects.filter(pk=kwargs['pk'])
+    context['vote'] = vote[0] if len(vote) else None
+    return context

@@ -14,15 +14,20 @@ script(typ="text/javascript",src="{% static 'js/votedetail.js' %}")
   //-svg#vote-chart3(preserveAspectRatio="xMidYMid",style="border:1px solid #000")
   .vote-title {{vote.name}}
   .vote-brief.text-center
-    .prop
+    h3.prop
+      {% with item=vote %}
+      {% include 'vote/isOnGoing.jade' %}
+      {% endwith %}
+      | 
       i.glyphicon.glyphicon-calendar
-      |  表决時間從 2014.7.2 12:00 到 2014.8.2 12:00 止 
-    .prop
-      i.glyphicon.glyphicon-th-list
-      |  共 5 個方案，多選式表决 
-    .prop
-      i.glyphicon.glyphicon-exclamation-sign
-      |  投票率門檻 75%
+      | 開始時間: 
+      {% if vote.startMethod == '2' %}
+      | {{vote.startDate}}
+      {% else %}
+      | 未定
+      {% endif %}
+
+
   br
   .ribbon-red 說明
   //-.vote-desc {{vote.desc}}
@@ -31,7 +36,127 @@ script(typ="text/javascript",src="{% static 'js/votedetail.js' %}")
   br
   .ribbon-orange 提案細節
   .bl-orange
-    | 提案細節，例如：票選方式、開始結束條件、有效條件等等
+    accordion(ng-expand="!accordion.detail"): h4
+      span(ng-show="vote.startMethod=='1'") 手動開始
+      span(ng-show="vote.startMethod=='2'") 從 {{'vote.startDate'|aj}} 開始
+      span(ng-show="vote.startMethod=='3'") 條件達成時開始
+      | ，
+      span(ng-show="vote.endMethod=='1'") 手動結束
+      span(ng-show="vote.endMethod=='2'") 至 {{'vote.endDate'|aj}} 結束
+      span(ng-show="vote.endMethod=='3'") 條件達成時結束
+      |  的
+      span(ng-show="vote.voteMethod=='1'") 單選
+      span(ng-show="vote.voteMethod=='2'") 多選
+      span(ng-show="vote.voteMethod=='3'") 排名
+      span(ng-show="vote.voteMethod=='4'") 給分
+      | 式投票。
+      a.btn.btn-link(ng-click="accordion.detail=true") 了解更多...
+    accordion(ng-expand="accordion.detail")
+      a.btn.btn-link(ng-click="accordion.detail=false") 回到精簡顯示...
+      .panel.panel-default
+        .panel-heading
+          .row.text-cener
+            h4.col-sm-6: b 開始時間
+            h4.col-sm-6: b 結束時間
+        .panel-body
+          .row
+            .col-sm-6
+              .list-group: big.list-group-item
+                span(ng-show="vote.startMethod=='1'") 由開案人手動開始
+                span(ng-show="vote.startMethod=='2'") 從 {{'vote.startDate'|aj}} 開始
+                span(ng-show="vote.startMethod=='3'") 條件滿足才會開始
+              div(ng-show="vote.startMethod=='3'")
+                h4 開始條件
+                .list-group
+                  .list-group-item(ng-show="vote.needPlan") 至少 {{'vote.planCount'|aj}} 個方案
+                  .list-group-item(ng-show="vote.needQuality") 至少 {{'vote.qualifiedRate'|aj}}% 的方案有效
+                  .list-group-item(ng-show="vote.needAgree") 至少 {{'vote.agreeRate'|aj}}% 的人同意開始
+                  .list-group-item(ng-show="vote.needAnswer") 至少 {{'vote.answerRate'|aj}}% 的問題有回答
+                  .list-group-item(ng-show="vote.needStartCountDown")
+                    | 條件達成後倒數 
+                    timedelta.pull-right(ng-model="vote.startCountDown",ng-disabled="true")
+
+            .col-sm-6
+              .list-group: big.list-group-item
+                span(ng-show="vote.endMethod=='1'") 由開案人手動結束
+                span(ng-show="vote.endMethod=='2'") 至 {{'vote.endDate'|aj}} 結束
+                span(ng-show="vote.endMethod=='3'") 條件滿足才會結束
+              div(ng-show="vote.endMethod=='3'")
+                h4 結束條件
+                .list-group
+                  .list-group-item(ng-show="vote.needVote") 投票率要超過 {{'vote.voteRate'|aj}}%
+                  .list-group-item(ng-show="vote.needEndCountDown")
+                    | 條件達成後倒數 
+                    timedelta.pull-right(ng-model="vote.endCountDown",ng-disabled="true")
+
+      .panel.panel-default
+        .panel-heading: h4: b: 投票形式與設定
+        .panel-body
+          h4(ng-show="vote.voteMethod=='1'") 單選式投票
+          h4(ng-show="vote.voteMethod=='2'") 多選式投票，每人 {{'vote.maxChoiceCount'|aj}} 票
+
+          h4.form-inline(ng-show="vote.voteMethod=='3'") 
+            span(ng-show="vote.voteMethod=='3'") 排名式投票
+            span(ng-show="vote.voteMethod=='4'") 給分式投票
+            span ，使用演算法 
+            select.form-control(ng-model="vote.rankMethod",ng-disabled="true")
+              {% include 'vote/sortMethod.jade' %}
+        .panel-body
+          .row
+            .col-sm-6
+              .list-group
+                .list-group-item
+                  i.glyphicon.glyphicon-eye-open
+                  |  
+                  span(ng-show="vote.disclosedBallot") 記名投票
+                  span(ng-show="!vote.disclosedBallot") 不記名投票
+                .list-group-item
+                  i.glyphicon.glyphicon-log-in
+                  |  
+                  span(ng-show="vote.allowAnonymouse") 不需登入即可投票
+                  span(ng-show="vote.!allowAnonymouse") 不需登入即可投票
+                .list-group-item
+                  i.glyphicon.glyphicon-user
+                  |  
+                  span(ng-show="vote.noProxy") 不可委任投票
+                  span(ng-show="vote.!noProxy") 可委任投票
+                .list-group-item
+                  i.glyphicon.glyphicon-share-alt
+                  |  
+                  span(ng-show="vote.allowFork") 允許複製提案
+                  span(ng-show="!vote.allowFork") 不允許複製提案
+            .col-sm-6
+              .list-group
+                .list-group-item
+                  i.glyphicon.glyphicon-remove
+                  |  
+                  span(ng-show="vote.allowNullTicket") 允許廢票
+                  span(ng-show="!vote.allowNullTicket") 不允許廢票
+                .list-group-item
+                  i.glyphicon.glyphicon-comment
+                  |  
+                  span(ng-show="vote.mute") 禁止討論
+                  span(ng-show="!vote.mute") 開放討論
+                .list-group-item
+                  i.glyphicon.glyphicon-thumbs-up
+                  |  
+                  span(ng-show="vote.noKarma") 關閉評價
+                  span(ng-show="!vote.noKarma") 開放評價
+                .list-group-item
+                  i.glyphicon.glyphicon-bullhorn
+                  |  
+                  span(ng-show="vote.allowNewPlan") 允許投票人自建方案
+                  span(ng-show="!vote.allowNewPlan") 不可新增方案
+          h4 投票有效門檻
+          .list-group
+            .list-group-item(ng-show="vote.useNullTicketRate")
+              廢票率大於 {{'vote.nullTicketRate'|aj}}% 時，投票即作廢
+            .list-group-item(ng-show="vote.useValidVoteRate")
+              投票率不足 {{'vote.validVoteRate'|aj}}% 時，投票即作廢
+            .list-group-item(ng-show="vote.useObtainRate")
+              最高得票率不足 {{'vote.obtainRate'|aj}}% 時，投票即作廢
+            .list-group-item(ng-show="!vote.useNullTicketRate && !vote.useValidVoteRate && !vote.useObtainRate") 無
+
   br
   .ribbon-yellow 候選項目
   .btn.btn-link.pull-right(ng-click="togglenewplan=!togglenewplan")
@@ -42,22 +167,33 @@ script(typ="text/javascript",src="{% static 'js/votedetail.js' %}")
       form.panel-body
         .form-group
           label 方案名稱
-          input.form-control(placeholder="方案名稱，例如：我同意這個提案")
+          input.form-control(ng-model="newplan.d.name",placeholder="方案名稱，例如：我同意這個提案")
         .form-group
           label 方案描述
-          textarea.form-control(placeholder="請詳細描述這個方案的內容")
-        .btn.btn-primary 新增方案
+          textarea.form-control(ng-model="newplan.d.desc",placeholder="請詳細描述這個方案的內容")
+        .btn.btn-primary(ng-click="newplan.submit()") 新增方案
         .btn.btn-default(ng-click="togglenewplan=!togglenewplan") 取消這個動作
-    {% for item in vote.plan.all %}
-    .panel.panel-default.vote-item.panel-discuss
-      .panel-heading {{item.name}}
+
+    .panel.panel-default.vote-item.panel-discuss(ng-repeat="item in vote.plan")
+      .panel-heading
+        | {{'item.name'|aj}}
+        .btn.btn-link.pull-right(ng-click="toggleballot(item)") 投
       .panel-body
-        {% if item.desc %}
-        | {{item.desc}}
-        {% else %}
-        | 這個項目沒有寫描述。
-        {% endif %}
-    {% endfor %}
+        | {{'item.desc'|aj}}
+        .text-muted(ng-show="!item.desc") 這個項目沒有寫描述。
+
+    //-div(note="generated by django template")
+      {% for item in vote.plan.all %}
+      .panel.panel-default.vote-item.panel-discuss
+        .panel-heading {{item.name}}
+        .panel-body
+          {% if item.desc %}
+          | {{item.desc}}
+          {% else %}
+          .text-muted 這個項目沒有寫描述。
+          {% endif %}
+      {% endfor %}
+
   br
   .ribbon-green 討論
   .bl-green

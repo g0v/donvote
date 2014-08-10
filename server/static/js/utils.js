@@ -56,12 +56,15 @@ x$.directive('timedelta', function($compile){
         return e.find("." + it);
       }), d = ref$[0], h = ref$[1], m = ref$[2];
       updateModel = function(){
-        return s.model = (d.val() * 86400 + h.val() * 3600 + m.val() * 60) * 1000;
+        s.model = d.val() * 86400 + h.val() * 3600 + m.val() * 60;
+        return console.log(s.model);
       };
       if (a['ngModel']) {
         [d, h, m].map(function(it){
           return it.on('change', function(){
-            return updateModel();
+            return s.$apply(function(){
+              return updateModel();
+            });
           });
         });
         s.$watch('disabled', function(){
@@ -71,7 +74,6 @@ x$.directive('timedelta', function($compile){
         });
         return s.$watch('model', function(v){
           if (v) {
-            v /= 1000;
             d.val(parseInt(v / 86400));
             h.val(parseInt((v % 86400) / 3600));
             return m.val(parseInt((v % 3600) / 60));

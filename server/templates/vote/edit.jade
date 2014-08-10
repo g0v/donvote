@@ -2,9 +2,17 @@
 {% load angularjs %}
 {% load staticfiles %}
 {% block 'content' %}
+{% if vote %}
+script.
+  var voteid = {{vote.pk}};
+{% endif %}
 script(type="text/javascript",src="/s/js/newvote.js")
 form#vote-new(ng-controller="newvote")
+  {% if vote %}
+  h2 修改投票案
+  {% else %}
   h2 建立投票案
+  {% endif %}
   hr
   .row
     .col-sm-3.text-right
@@ -229,12 +237,7 @@ form#vote-new(ng-controller="newvote")
         h4 排名演算法
       .col-sm-9
         select.form-control(name="rankMethod",ng-model="vote.rankMethod",ng-disabled="!vote.voteMethod[3] && !vote.voteMethod[4]")
-          option(value="1") Schulze Method
-          option(value="2") Ranked Pairs
-          option(value="3") Copeland
-          option(value="4") Kemeny-Young
-          option(value="5") Nanson
-          option(value="6") Baldwin
+          {% include 'vote/sortMethod.jade' %}
     .row
       .col-sm-3.text-right
         h4 方案列表
@@ -377,13 +380,26 @@ form#vote-new(ng-controller="newvote")
             | 投票人可開新方案
 
   hr
+  {% if vote %}
+  .btn.btn-primary.btn-lg.btn-block.btn-active(ng-click="editvote(vote)",ng-class="{'deactive':state!=1}")
+    | 儲存變更
+  {% else %}
   .btn.btn-primary.btn-lg.btn-block.btn-active(ng-click="newvote(vote)",ng-class="{'deactive':state!=1}")
-    | 馬上建立新投票案
+    | 建立新投票案
+  {% endif %}
   .btn.btn-warning.btn-lg.btn-block.btn-active.deactive(ng-click="newvote(vote)",ng-class="{'deactive':state!=2}")
-    | 建立投票案中
+    {% if vote %}
+    | 儲存中...
+    {% else %}
+    | 建立投票案中...
+    {% endif %}
     img(src="{% static 'img/ellipsis-pink.gif' %}")
   .btn.btn-success.btn-lg.btn-block.btn-active.deactive(ng-click="newvote(vote)",ng-class="{'deactive':state!=3}")
+    {% if vote %}
+    | 儲存完成
+    {% else %}
     | 投票案建立完成
+    {% endif %}
     i.glyphicon.glyphicon-ok
 
   br

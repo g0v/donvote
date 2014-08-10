@@ -1,7 +1,7 @@
 err = -> console.error "[ERROR]", it
 ok = -> console.log "[OK]", it
 
-angular.module \donvote, <[ui.choices ui.bootstrap.datetimepicker]>
+angular.module \donvote, <[ui.choices ui.bootstrap.datetimepicker ld.common]>
   ..config ($httpProvider) -> $httpProvider.defaults.headers.common["X-CSRFToken"] = $.cookie \csrftoken
   ..controller \main, ($scope, $http) ->
     console.log \ok

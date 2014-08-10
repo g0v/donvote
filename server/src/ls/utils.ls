@@ -34,12 +34,12 @@ angular.module \donvote
       link: (s,e,a) ->
         [d,h,m] = <[day hour minute]>map -> e.find(".#it")
         update-model = ->
-          s.model = (d.val! * 86400 + h.val! * 3600 + m.val! * 60) * 1000
+          s.model = (d.val! * 86400 + h.val! * 3600 + m.val! * 60)
+          console.log s.model
         if a[\ngModel] => 
-          [d,h,m]map -> it.on \change -> update-model!
+          [d,h,m]map -> it.on \change -> s.$apply -> update-model!
           s.$watch 'disabled' -> [d,h,m].map -> it.prop \disabled, s.disabled or false
           s.$watch 'model' (v) -> if v =>
-            v /= 1000
             d.val parseInt(v / 86400)
             h.val parseInt((v % 86400)/3600)
-            m.val parseInt((v %3600)/60)
+            m.val parseInt((v % 3600)/60)

@@ -13,7 +13,7 @@ urlpatterns = patterns('',
     url(r'^accounts/', include('allauth.urls')),
     url(r'^', include('account.urls')),
 
-    url(r'^$', TemplateView.as_view(template_name = "index.jade")),
+    url(r'^$', TemplateView.as_view(template_name = "landing.jade")),
     url(r'^dev/?$', TemplateView.as_view(template_name = "dev.jade")),
     url(r'^new/?$', TemplateView.as_view(template_name = "new.jade")),
     url(r'^', include('vote.urls')),

@@ -1,7 +1,7 @@
 {% load staticfiles %}
 doctype html
 //- basic libraries: jquery(1.10.2), d3js(3.3.11), angularjs(1.2.3), bootstrap(3.0)/semantic-ui(0.9.3/0.9.5)
-- var usecdn = false
+- var usecdn = true
 - var useog = false
 - var lib_jquery = true
 - var lib_d3js = true
@@ -24,6 +24,7 @@ html(lang="en")
     script(type="text/javascript",src="/s/assets/moment/moment.js")
     script(type="text/javascript",src="/s/assets/datetime/datetimepicker.js")
     script(type="text/javascript",src="/s/assets/ui-choices/ui-choices.js")
+    script(type="text/javascript",src="/s/js/common.js")
     script(type="text/javascript",src="/s/js/index.js")
     script(type="text/javascript",src="/s/js/utils.js")
   body(ng-app="donvote")
@@ -58,11 +59,11 @@ html(lang="en")
           li: a(href="/accounts/signup/") 註冊
           {% endif %}
     #root
-      #content-margin: .ib
-        | {% block content-margin %}
-        | {% endblock %}
       #content-nomargin
         | {% block content-nomargin %}
+        | {% endblock %}
+      #content-margin: .ib
+        | {% block content-margin %}
         | {% endblock %}
     form
       | {% csrf_token %}

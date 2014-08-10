@@ -79,6 +79,18 @@ angular.module \donvote
     $scope.removeplan = (p) ->
       $scope.vote.plan = $scope.vote.plan.filter -> it.name != p.name
     $scope.state = 1
+    $scope.editvote = (v) ->
+      $scope.state = 2
+      $http do
+        url: "/api/vote/#{voteid}/"
+        method: \PUT
+        data: JSON.stringify($scope.vote)
+      .success (d) ->
+        $timeout ( ->
+          $scope.state = 3 
+          $timeout ( -> $scope.state = 1 ), 4000
+        ), 2000
+      .error (e) -> console.error e
     $scope.newvote = (v) ->
       $scope.state = 2
       $http do
@@ -92,13 +104,14 @@ angular.module \donvote
           $timeout ( -> $scope.state = 1 ), 4000
         ), 2000
       .error (e) -> console.error e
-    /*$timeout ->
-      $http do
-        url: \/api/vote/1
-        method: \GET
-      .success (d) -> 
-        console.log d
-        $scope.custom.time = true
-        $scope.custom.plan = true
-        $scope.vote = d
-    , 1000*/
+    if voteid? =>
+      $timeout ->
+        $http do
+          url: \/api/vote/1
+          method: \GET
+        .success (d) -> 
+          console.log d
+          $scope.custom.time = true
+          $scope.custom.plan = true
+          $scope.vote = d
+      , 2000

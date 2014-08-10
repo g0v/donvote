@@ -23,13 +23,11 @@ class VotePermission(permissions.BasePermission):
   def has_object_permission(self, request, view, obj):
     if request.method in permissions.SAFE_METHODS:
       return True
+    if request.user == obj.owner: return True
     for k in request.DATA:
-      print(k)
       try: src = getattr(obj,k)
       except: continue
-      print(src)
       des = request.DATA[k]
-      print(des)
       if type(src) == User:
         result = True if src.username==des else False
       elif str(type(src)).startswith("<class 'django.db.models.fields.related.ManyRelatedManager'>"):
