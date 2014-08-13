@@ -21,10 +21,12 @@ x$.controller('discuss', function($scope, $http){
       reset: function(){
         return this.d = {};
       },
-      setPoint: function(it){
-        return this.d.point = it;
+      setTendency: function(it){
+        return this.d.tendency = it;
       },
-      d: {}
+      d: {
+        tendency: 2
+      }
     }
   };
 });

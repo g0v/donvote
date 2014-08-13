@@ -1,9 +1,14 @@
 {% load angularjs %}
 #side-menu
   .profile
-    img(src="http://graph.facebook.com/zbryikt/picture")
+    .avatar(src="http://graph.facebook.com/zbryikt/picture")
     .desc
-      .nick Kirby Wu
+      .nick 
+        {% if request.user.last_name %}
+        | {{request.user.last_name}}
+        {% else %}
+        | {{request.user.username}}
+        {% endif %}
       .title 大將軍
   ul.list-group
     li.list-group-item 

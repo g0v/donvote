@@ -45,7 +45,7 @@ class DiscussSerializer(serializers.ModelSerializer):
   owner = serializers.Field(source='owner.username')
   class Meta:
     model = Discuss
-    field = (  'owner', 'karma', 'createDate', 'modifyDate', 'content')
+    field = (  'owner', 'karma', 'createDate', 'modifyDate', 'content', 'tendency'  )
 
 class BallotSerializer(serializers.ModelSerializer):
   owner = serializers.Field(source='owner.username')

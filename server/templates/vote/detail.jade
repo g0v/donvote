@@ -113,13 +113,13 @@ script(typ="text/javascript",src="{% static 'js/votedetail.js' %}")
                 .list-group-item
                   i.glyphicon.glyphicon-log-in
                   |  
-                  span(ng-show="vote.allowAnonymouse") 不需登入即可投票
-                  span(ng-show="vote.!allowAnonymouse") 不需登入即可投票
+                  span(ng-show="vote.allowAnonymous") 不需登入即可投票
+                  span(ng-show="!vote.allowAnonymous") 不需登入即可投票
                 .list-group-item
                   i.glyphicon.glyphicon-user
                   |  
                   span(ng-show="vote.noProxy") 不可委任投票
-                  span(ng-show="vote.!noProxy") 可委任投票
+                  span(ng-show="!vote.noProxy") 可委任投票
                 .list-group-item
                   i.glyphicon.glyphicon-share-alt
                   |  
@@ -222,7 +222,7 @@ script(typ="text/javascript",src="{% static 'js/votedetail.js' %}")
         .btn.btn-primary.pull-right(ng-click="comment.new.submit()") 發言
         .clearfix
     {% for discuss in vote.discuss.all %}
-    .panel.panel-default.vote-post
+    .panel.panel-default.panel-discuss
       .panel-heading
         .avatar
         .ib
@@ -253,7 +253,7 @@ script(typ="text/javascript",src="{% static 'js/votedetail.js' %}")
           |  回覆
     {% endfor %}
 
-    .panel.panel-default.vote-post
+    .panel.panel-default.panel-discuss
       .panel-heading
         .avatar
         .ib

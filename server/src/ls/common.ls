@@ -1,4 +1,20 @@
 angular.module \ld.common, <[]>
+
+  ..directive \state, <[$timeout]> ++ ($timeout) -> do
+    require: \ngModel
+    restrict: \E
+    scope: state: \=ngModel
+    templateUrl: \/directives/state
+    link: (s,e,a,c) ->
+
+  ..factory \stateIndicator, -> do
+    init: -> do
+      value: 0
+      reset: -> @value = 0
+      loading: -> @value = 1
+      done: -> @value = 2
+      fail: -> @value = 3
+
   ..directive \delayBk, -> do
     restrict: \A
     link: (scope, e, attrs, ctrl) ->

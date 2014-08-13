@@ -12,6 +12,6 @@ angular.module \donvote
           .success (d) -> console.log "success:", d
           .error (d) -> console.log "success:", d
         reset: -> @d = {}
-        setPoint: -> @d.point = it
-        d: {}
+        setTendency: -> @d.tendency = it
+        d: {tendency: 2}
 

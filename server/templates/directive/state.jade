@@ -1,0 +1,5 @@
+{% load staticfiles %}
+.state-indicator
+  img(ng-show="state==1",src="{% static 'img/spin.gif' %}")
+  i.fa.fa-check.ajax-done(ng-show="state==2",ng-class="{'fadeout':state==2}")
+  i.fa.fa-exclamation-circle.ajax-fail(mg-show="state==3",ng-class="{'fadeout':state==3}")

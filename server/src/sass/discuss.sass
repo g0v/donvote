@@ -24,7 +24,7 @@
     font-size: 1.5em
     .btn-link
       padding: 0
-  .panel-body.reply
+  .panel-body.reply, .panel-reply-new
     .avatar
       width: 32px
       height: 32px
@@ -37,6 +37,18 @@
       font-size: 0.8em
     .time
       font-size: 0.8em
+  .panel-reply-new
+    padding-left: 46px
+    .avatar
+      margin-left: -38px
+      position: absolute
+
+    textarea
+      position: relative
+      width: 100%
+      right: 0
+      float: left
+
   .panel-footer
     border-bottom: 1px solid #ddd
 
@@ -59,10 +71,22 @@
       &.red
         color: #f90
       i.glyphicon-ok
-        color: #000
+        color: #f00
       i.glyphicon-minus
         color: #999
         opacity: 0.5
+    .btn-link
+      text-decoration: none
+      i.glyphicon-ok
+        display: none
+      i.glyphicon-minus
+        display: inline
+    .btn-link.active
+      @include box-shadow(none)
+      i.glyphicon-ok
+        display: inline
+      i.glyphicon-minus
+        display: none
   .panel-body
     font-size: 2em
     color: #999

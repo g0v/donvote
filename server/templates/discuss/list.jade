@@ -5,18 +5,21 @@ div(ng-controller="discuss")
       .btn.btn-link
         i.glyphicon.glyphicon-comment
         |  發表意見 
-      .btn.btn-link.green(ng-click="discuss.new.setPoint(1)")
+      .btn.btn-link.green(ng-click="discuss.new.setTendency(1)",ng-class="{'active':discuss.new.d.tendency==1}")
         i.glyphicon.glyphicon-thumbs-up
         |  正方意見
+        i.glyphicon.glyphicon-minus
         i.glyphicon.glyphicon-ok
-      .btn.btn-link.gray(ng-click="discuss.new.setPoint(2)")
+      .btn.btn-link.gray(ng-click="discuss.new.setTendency(2)",ng-class="{'active':discuss.new.d.tendency==2}")
         i.glyphicon.glyphicon-adjust
         |  中立意見
         i.glyphicon.glyphicon-minus
-      .btn.btn-link.red(ng-click="discuss.new.setPoint(3)")
+        i.glyphicon.glyphicon-ok
+      .btn.btn-link.red(ng-click="discuss.new.setTendency(3)",ng-class="{'active':discuss.new.d.tendency==3}")
         i.glyphicon.glyphicon-thumbs-down
         |  反方意見
         i.glyphicon.glyphicon-minus
+        i.glyphicon.glyphicon-ok
       .clearfix
     .panel-body
       textarea(ng-model="discuss.new.d.content",placeholder="想討論什麼？")
@@ -35,9 +38,19 @@ div(ng-controller="discuss")
             |  Admin : " 大家來測試一下... "
         .desc
           span.time {{discuss.createDate}}
+          {% if discuss.tendency == 1 %}
           span.label.label-success
             i.glyphicon.glyphicon-thumbs-up
             |  支持
+          {% elif discuss.tendency == 2 %}
+          span.label.label-primary
+            i.glyphicon.glyphicon-adjust
+            |  中立
+          {% else %}
+          span.label.label-danger
+            i.glyphicon.glyphicon-thumbs-down
+            |  反對
+          {% endif %}
       .clearfix
     .panel-body
       | {{discuss.content}}
@@ -51,6 +64,7 @@ div(ng-controller="discuss")
       .btn.btn-link
         i.glyphicon.glyphicon-thumbs-down
         |  反對
-      .btn.btn-link.pull-right
-        |  回覆
+    .panel-body.panel-reply-new
+      .avatar
+      textarea.form-control(placeholder="留言...")
   {% endfor %}

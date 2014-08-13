@@ -29,6 +29,7 @@ class Karma(models.Model):
 class Discuss(WithDateModel):
   owner = models.ForeignKey('auth.User', related_name="discuss")
   karma = models.ManyToManyField(Karma,blank=True)
+  tendency = models.IntegerField(default=2)
   content = models.TextField(blank=False)
 
 class Plan(WithDescModel):

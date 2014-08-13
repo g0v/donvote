@@ -2,10 +2,13 @@
 {% load angularjs %}
 {% load staticfiles %}
 {% block 'content' %}
-{% if vote %}
 script.
+  {% if vote %}
   var voteid = {{vote.pk}};
-{% endif %}
+  {% endif %}
+  {% if ownerapi %}
+  var ownerapi = '{{ownerapi}}';
+  {% endif %}
 script(type="text/javascript",src="/s/js/newvote.js")
 form#vote-new(ng-controller="newvote")
   {% if vote %}

@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.views.generic import TemplateView, View
+from django.core.urlresolvers import reverse
 from rest_framework import generics, permissions
 from .models import UserProfile, WorkGroup
 from .serializers import UserProfileSerializer, WorkGroupSerializer
@@ -56,3 +57,9 @@ class WorkGroupSubVoteList(VoteList):
   root_class = WorkGroup
   target_field = "vote"
 
+class WorkGroupNewVoteView(TemplateView):
+  template_name = "vote/edit.jade"
+  def get_context_data(self, **kwargs):
+    context = super(WorkGroupNewVoteView, self).get_context_data(**kwargs)
+    context["ownerapi"] = reverse("group_vote_api", kwargs={"vote_owner_pk": kwargs["vote_owner_pk"]})
+    return context

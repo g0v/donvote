@@ -93,8 +93,10 @@ angular.module \donvote
       .error (e) -> console.error e
     $scope.newvote = (v) ->
       $scope.state = 2
+      url = if ownerapi? => ownerapi else \/api/vote/
+      console.log url
       $http do
-        url: \/api/vote/
+        url: url
         method: \POST
         data: JSON.stringify($scope.vote)
       .success (d) ->
@@ -107,7 +109,7 @@ angular.module \donvote
     if voteid? =>
       $timeout ->
         $http do
-          url: \/api/vote/1
+          url: "/api/vote/#{voteid}"
           method: \GET
         .success (d) -> 
           console.log d

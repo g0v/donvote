@@ -143,9 +143,12 @@ x$.controller('newvote', function($scope, $timeout, $http){
     });
   };
   $scope.newvote = function(v){
+    var url;
     $scope.state = 2;
+    url = typeof ownerapi != 'undefined' && ownerapi !== null ? ownerapi : '/api/vote/';
+    console.log(url);
     return $http({
-      url: '/api/vote/',
+      url: url,
       method: 'POST',
       data: JSON.stringify($scope.vote)
     }).success(function(d){
@@ -163,7 +166,7 @@ x$.controller('newvote', function($scope, $timeout, $http){
   if (typeof voteid != 'undefined' && voteid !== null) {
     return $timeout(function(){
       return $http({
-        url: '/api/vote/1',
+        url: "/api/vote/" + voteid,
         method: 'GET'
       }).success(function(d){
         console.log(d);
