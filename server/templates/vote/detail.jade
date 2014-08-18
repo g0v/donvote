@@ -1,9 +1,9 @@
 {% extends 'two-column.jade' %}
-{% load angularjs %}
 {% load staticfiles %}
-{% load json %}
+{% load addon %}
 {% block 'content' %}
 script(typ="text/javascript",src="{% static 'js/votedetail.js' %}")
+{% urlpatterns %}
 {% resInit vote vote.serializers VoteSerializer %}
 {% resInit user.profile account.serializers UserProfileSerializer %}
 #vote-detail(ng-controller="votedetail")

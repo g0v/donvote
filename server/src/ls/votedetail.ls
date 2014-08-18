@@ -1,6 +1,7 @@
 angular.module \donvote
-  ..controller \votedetail, ($scope, $http, resInit) ->
+  ..controller \votedetail, ($scope, $http, resInit, urlpatterns) ->
     console.log resInit
+    console.log urlpatterns["account_login"]()
     #$scope.xx = resInit
     pretain-viewbox = do
       target: {}

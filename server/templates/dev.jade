@@ -1,5 +1,5 @@
 | {% extends 'base.jade' %}
-| {% load angularjs %}
+| {% load addon %}
 | {% block content-margin %}
 #dev(ng-controller="main",ng-init="id={{request.user.pk}}")
   .item(ng-show="!id"): .ib

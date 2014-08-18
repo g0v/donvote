@@ -1,4 +1,4 @@
-angular.module \ld.common, <[]>
+angular.module \django.common, <[]>
 
   ..provider \resInit, !-> 
     @resource = {}

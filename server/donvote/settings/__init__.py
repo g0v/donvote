@@ -43,6 +43,7 @@ INSTALLED_APPS = (
     'addon',
     'south',
     'rest_framework',
+    'django_js_reverse',
     'allauth',
     'allauth.account',
     'allauth.socialaccount',

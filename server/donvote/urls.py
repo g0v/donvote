@@ -21,4 +21,5 @@ urlpatterns = patterns('',
     url(r'^dev/?$', TemplateView.as_view(template_name = "dev.jade")),
     url(r'^new/?$', TemplateView.as_view(template_name = "new.jade")),
     url(r'^', include('vote.urls')),
+    url(r'^reversejs/$', 'addon.views.urls_js', name='reversejs'),
 )

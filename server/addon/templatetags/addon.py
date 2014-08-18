@@ -1,10 +1,21 @@
 from django import template
-from ..serializers import VoteSerializer
 from rest_framework.renderers import JSONRenderer
+from django.core.urlresolvers import reverse
 import importlib
 
-
 register = template.Library()
+
+class urlPatternNode(template.Node):
+  def render(self, context):
+    return """<script type="text/javascript" src="%s"></script>"""%(reverse("reversejs"))
+
+@register.tag
+def urlpatterns(parser, token):
+  return urlPatternNode()
+
+@register.filter
+def aj(value):
+    return "{{%s}}" % str(value)
 
 @register.filter
 def dumps(value,arg):
@@ -37,7 +48,7 @@ class resInitNode(template.Node):
       print("no no "+self.args[1])
       return ""
 
-    return ( "<script type='text/javascript'>angular.module('ld.common')" +
+    return ( "<script type='text/javascript'>angular.module('django.common')" +
            ".config(function(resInitProvider) {" + 
            "  res = resInitProvider.$get();" +
            ("  res['%s'] = %s;"%(self.args[1], JSONRenderer().render(v.data)) ) +
