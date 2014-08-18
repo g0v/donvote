@@ -11,7 +11,6 @@ class ProfileList(generics.ListCreateAPIView):
   paginate_by = 5
 
   def get_queryset(self):
-    print(self.kwargs)
     username = self.request.QUERY_PARAMS.get("username",None)
     if username:
       return UserProfile.objects.filter(owner__username__icontains=username)
