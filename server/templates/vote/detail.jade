@@ -1,12 +1,15 @@
 {% extends 'two-column.jade' %}
 {% load angularjs %}
 {% load staticfiles %}
+{% load json %}
 {% block 'content' %}
 script(typ="text/javascript",src="{% static 'js/votedetail.js' %}")
+{% resInit vote vote.serializers VoteSerializer %}
+{% resInit user.profile account.serializers UserProfileSerializer %}
 #vote-detail(ng-controller="votedetail")
   script.
     var voteid = '{{vote.pk}}';
-  div(style="position:absolute;text-align:right;right:0")
+  //-div(style="position:absolute;text-align:right;right:0")
     .btn.btn-primary(ng-click="settype('verticalBar')") Vertical
     .btn.btn-primary(ng-click="settype('horizontalBar')") Horizontal
     .btn.btn-primary(ng-click="settype('pieChart')") Pie Chart
@@ -26,6 +29,8 @@ script(typ="text/javascript",src="{% static 'js/votedetail.js' %}")
       {% else %}
       | 未定
       {% endif %}
+    h3.prop
+      .btn.btn-default.btn-lg 我要投票
 
 
   br

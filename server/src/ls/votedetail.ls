@@ -1,6 +1,7 @@
 angular.module \donvote
-  ..controller \votedetail, ($scope, $http) ->
-
+  ..controller \votedetail, ($scope, $http, resInit) ->
+    console.log resInit
+    #$scope.xx = resInit
     pretain-viewbox = do
       target: {}
       init: ->
@@ -254,6 +255,6 @@ angular.module \donvote
       console.log d
       vote-chart.data = d.plan
       d.plan.map -> 
-        it.count = parseInt(Math.random!*1000)
+        #it.count = parseInt(Math.random!*1000)
         it.color = vote-chart.color it.name
       vote-chart.render!

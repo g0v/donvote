@@ -1,30 +1,34 @@
 script(type="text/javascript",src="/s/js/discuss.js")
+script(type="text/javascript").
+  {% if ownerapi %}
+  var ownerapi = '{{ownerapi}}';
+  {% endif %}
 div(ng-controller="discuss")
   .panel.panel-default.panel-discuss-new
     .panel-heading
       .btn.btn-link
         i.glyphicon.glyphicon-comment
         |  發表意見 
-      .btn.btn-link.green(ng-click="discuss.new.setTendency(1)",ng-class="{'active':discuss.new.d.tendency==1}")
+      .btn.btn-link.green(ng-click="tend(1)",ng-class="{'active':data.tendency==1}")
         i.glyphicon.glyphicon-thumbs-up
         |  正方意見
         i.glyphicon.glyphicon-minus
         i.glyphicon.glyphicon-ok
-      .btn.btn-link.gray(ng-click="discuss.new.setTendency(2)",ng-class="{'active':discuss.new.d.tendency==2}")
+      .btn.btn-link.gray(ng-click="tend(2)",ng-class="{'active':data.tendency==2}")
         i.glyphicon.glyphicon-adjust
         |  中立意見
         i.glyphicon.glyphicon-minus
         i.glyphicon.glyphicon-ok
-      .btn.btn-link.red(ng-click="discuss.new.setTendency(3)",ng-class="{'active':discuss.new.d.tendency==3}")
+      .btn.btn-link.red(ng-click="tend(3)",ng-class="{'active':data.tendency==3}")
         i.glyphicon.glyphicon-thumbs-down
         |  反方意見
         i.glyphicon.glyphicon-minus
         i.glyphicon.glyphicon-ok
       .clearfix
     .panel-body
-      textarea(ng-model="discuss.new.d.content",placeholder="想討論什麼？")
+      textarea(ng-model="data.content",placeholder="想討論什麼？")
     .panel-footer
-      .btn.btn-primary.pull-right(ng-click="discuss.new.submit()") 發言
+      .btn.btn-primary.pull-right(ng-click="newDiscuss()") 發言
       .clearfix
   {% for discuss in item.discuss.all %}
   .panel.panel-default.panel-discuss
@@ -67,4 +71,5 @@ div(ng-controller="discuss")
     .panel-body.panel-reply-new
       .avatar
       textarea.form-control(placeholder="留言...")
+      .btn.btn-primary.btn-sm 送出
   {% endfor %}

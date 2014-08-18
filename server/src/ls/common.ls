@@ -1,6 +1,13 @@
 angular.module \ld.common, <[]>
 
-  ..directive \state, <[$timeout]> ++ ($timeout) -> do
+  ..provider \resInit, !-> 
+    @resource = {}
+    @["$get"] = ~> @resource
+
+  ..factory \blah, (resInit) -> do
+    console.log \ok
+
+  ..directive \ldstate, <[$timeout]> ++ ($timeout) -> do
     require: \ngModel
     restrict: \E
     scope: state: \=ngModel

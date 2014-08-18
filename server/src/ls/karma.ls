@@ -1,8 +1,9 @@
 angular.module \donvote
-  ..controller \discuss, ($scope, $http, stateIndicator) ->
+  ..controller \karma, ($scope, $http, stateIndicator) ->
     
-    $scope.newDiscuss = ->
+    $scope.newKarma = ->
       url = if ownerapi? => ownerapi else \/api/discuss/
+      url = \/api/discuss/3/karma/
       console.log url
       $scope.state.loading!
       $http do
@@ -15,7 +16,9 @@ angular.module \donvote
         $scope.state.fail!
 
     $scope.state = stateIndicator.init!
-    $scope.tend = -> $scope.data.tendency = it
-    $scope.reset = -> $scope.data = tendency: 2
+    $scope.tend = -> $scope.data.value = it
+    $scope.reset = -> $scope.data = value: 2
 
     $scope.reset!
+
+    #TODO need update

@@ -49,8 +49,22 @@ class KarmaList(generics.ListCreateAPIView):
   permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
   queryset = Discuss.objects.all()
   serializer_class = KarmaSerializer
+  root_class = None
   def pre_save(self, obj):
     obj.owner = self.request.user
+
+  def post(self, request, *args, **kargs):
+    d = root_class.objects.filter(pk=self.kwargs.get("karma_owner_pk") or -1)
+    if len(d)==0: return HttpResponseNotFound()
+    k = d.karma.filter(owner=request.user)
+    if len(k) == 0:
+      k = KarmaSerializer(data=request.DATA)
+    else:
+      k = KarmaSerializer(k[0], data=request.DATA)
+    if not k.is_valid(): return HttpResponseNotAllowed("data validation failed")
+    k.save()
+    d.karma.add(k)
+    return super(DiscussSubKarmalist, self).post(request, *args, **kwargs)
 
 class DiscussList(generics.ListCreateAPIView):
   permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
@@ -71,6 +85,7 @@ class VoteDetailView(TemplateView):
   def get_context_data(self, **kwargs):
     context = super(VoteDetailView, self).get_context_data(**kwargs)
     vote = Vote.objects.filter(pk=kwargs['pk'])
+    context["vote_json"] = JSONRenderer().render(VoteSerializer(vote[0]).data) if len(vote) else ""
     context['vote'] = vote[0] if len(vote) else None
     return context
 
@@ -120,7 +135,8 @@ class BallotView(View):
     p = Plan.objects.filter(pk=(kwargs.get("plan_pk") or -1))
     b = Ballot.objects.filter(pk=(kwargs.get("ballot_pk") or -1))
     if kwargs.get("ballot_pk") and not b: raise Http404()
-    return map(lambda x: x[0] if len(x) else None, [v,p,b])
+    if len(v): all_b = v[0].ballot.filter(pk=(kwargs.get("ballot_pk") or -1))
+    return map(lambda x: x[0] if len(x) else None, [v,p,b, all_b])
 
   def get(self, request, *args, **kwargs):
     objs = self.prepare(request, *args, **kwargs)
@@ -137,6 +153,7 @@ class BallotView(View):
   def post(self, request, *args, **kwargs):
     objs = self.prepare(request, *args, **kwargs)
     if not (objs[0]) or objs[2]: return HttpResponseNotAllowed("ambiguous/duplicate ballot")
+    if objs[3]>1 and objs[0].voteMethod=='1': return HttpResponseNoteAllowed("only one ballot allowed")
     ret = Ballot.objects.filter(owner=request.user).filter(vote=objs[0]).filter(plan=objs[1])
     if len(ret): return HttpResponseNotAllowed("duplicate ballot")
     b = Ballot.objects.create(vote=objs[0],plan=objs[1],owner=request.user,value=0)
@@ -177,3 +194,10 @@ class VoteEditView(TemplateView):
     vote = Vote.objects.filter(pk=kwargs['pk'])
     context['vote'] = vote[0] if len(vote) else None
     return context
+
+@SubView
+class DiscussSubKarmaList(KarmaList):
+  root_class = Discuss
+  target_field = "karma"
+
+

@@ -42,6 +42,7 @@ class WorkGroupDetailView(TemplateView):
   def get_context_data(self, **kwargs):
     context = super(WorkGroupDetailView, self).get_context_data(**kwargs)
     group = WorkGroup.objects.filter(pk=kwargs['pk'])
+    context["ownerapi"] = reverse("group_discuss_api", kwargs={"discuss_owner_pk": kwargs["pk"]})
     context['group'] = group[0] if len(group) else None
     return context
 
