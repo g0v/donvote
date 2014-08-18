@@ -1,10 +1,9 @@
 angular.module \donvote
-  ..controller \group, <[$scope $http]> ++ ($scope, $http) ->
+  ..controller \group.edit, <[$scope $http resInit urlpatterns]> ++ ($scope, $http, resInit, urlpatterns) ->
     $scope.group = {}
-    $scope.submit = ->
-      console.log \ok
+    $scope.create = ->
       $http do
-        url: \/api/group/new/
+        url: urlpatterns.api_create_group()
         method: \POST
         data: JSON.stringify($scope.group)
       .success (e) -> console.log e

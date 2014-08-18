@@ -165,3 +165,6 @@ EMAIL_HOST_USER = "noreply@tkirby.org"
 EMAIL_HOST_PASSWORD = "#F,,axum8pt123"
 
 SITE_ID = 1
+
+MEDIA_ROOT = PRJDIR('media')
+MEDIA_URL = '/m/'

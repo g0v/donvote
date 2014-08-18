@@ -44,3 +44,6 @@ d2.save()
 w.vote.add(vote)
 w.save()
 
+adminProfile = admin.profile
+tkirby = User.objects.create(username="tkirby")
+tkirbyProfile = tkirby.profile

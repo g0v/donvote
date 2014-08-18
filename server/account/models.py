@@ -13,6 +13,7 @@ class NameList(models.Model):
 class WorkGroup(models.Model):
   name = models.CharField(max_length = "100", blank=False)
   desc = models.TextField(blank=True)
+  avatar = models.ImageField(upload_to='avatar/g/')
   dep = models.ManyToManyField('self')
   karma = models.ManyToManyField(Karma,blank=True)
   discuss = models.ManyToManyField(Discuss,blank=True)
@@ -28,4 +29,3 @@ class UserProfile(models.Model):
     return self.owner.username
 
 User.profile = property(lambda u: UserProfile.objects.get_or_create(owner=u)[0])
-

@@ -2,8 +2,9 @@
 {% load addon %}
 {% load staticfiles %}
 {% block 'content' %}
-script(type="text/javascript",src="/s/js/newgroup.js")
-div(ng-controller="group")
+{% urlpatterns %}
+script(type="text/javascript",src="/s/js/group/edit.js")
+div(ng-controller="group.edit")
   h3 新增群組
   br
   .form
@@ -16,6 +17,34 @@ div(ng-controller="group")
     .form-group
       label 群組成員
       input.form-control(type="text")
+      //-select#e1.form-control(multiple)
+        option(value="A") AAA
+        option(value="B") BBB
+      input#e1.form-control(type="hidden",multiple)
+      script.
+        var list = [];
+        for(var i=0;i<100;i++) { list.push(""+parseInt(Math.random()*100000)); }
+        $("#e1").select2({
+          placeholder:'選擇人或群組..',
+          minimumInputLength: 1,
+          multiple: true,
+          ajax: {
+            url: "http://localhost:8002/api/user/",
+            dataType: "json",
+            quietMillis: 100,
+            data: function(term, page) {
+              return {
+                username: term,
+                page_limit: 5,
+                page: page
+              };
+            },
+            results: function(data, page) {
+              data.results = data.results.map(function(it) { return {id: it.id, text: it.username};});
+              return {results: data.results, more: page * 5 < data.count};
+            }
+          }
+        });
     hr
-    .btn.btn-primary.btn-block.btn-lg(ng-click="submit()") 建立群組
+    .btn.btn-primary.btn-block.btn-lg(ng-click="create()") 建立群組
 {% endblock %}
