@@ -14,6 +14,15 @@ class List(generics.ListCreateAPIView):
   queryset = WorkGroup.objects.all()
   serializer_class = WorkGroupSerializer
   filter_fields = ('name')
+  paginate_by = 5
+  def get_queryset(self):
+    name = self.request.QUERY_PARAMS.get("name",None)
+    if name:
+      ret =  WorkGroup.objects.filter(name__icontains=name)
+      return WorkGroup.objects.filter(name__icontains=name)
+    else:
+      return WorkGroup.objects.all()
+
   def pre_save(self, obj):
     obj.owner = self.request.user
 

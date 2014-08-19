@@ -4,9 +4,9 @@ from . import views
 
 urlpatterns = patterns('account.views',
     # API
-    url(r'^api/user/$', views.user.ProfileList.as_view()),
-    url(r'^api/user/(?P<pk>[0-9]+)/$', views.user.ProfileDetail.as_view()),
-    url(r'^api/group/$', views.group.List.as_view()),
+    url(r'^api/user/$', views.user.List.as_view(),name="api_user_list"),
+    url(r'^api/user/(?P<pk>[0-9]+)/$', views.user.Detail.as_view()),
+    url(r'^api/group/$', views.group.List.as_view(),name="api_group_list"),
     url(r'^api/group/new/$', views.group.List.as_view(),name="api_create_group"),
     url(r'^api/group/(?P<pk>[0-9]+)/$', views.group.Detail.as_view()),
     url(r'^api/group/(?P<discuss_owner_pk>[0-9]+)/discuss/$', views.group.DiscussList.as_view(),name="group_discuss_api"),
