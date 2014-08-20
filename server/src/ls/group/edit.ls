@@ -14,7 +14,8 @@ angular.module \donvote
             page_limit: 5,
             page: page
           results: (data, page) ->
-            data.results = data.results.map(-> {id: it.id, text: it.username})
+            console.log(">>>", data)
+            data.results = data.results.map(-> {id: it.id, text: it.owner.username})
             {results: data.results, more: page * 5 < data.count}
       group: do
         placeholder: \選擇群組
@@ -34,13 +35,14 @@ angular.module \donvote
 
   ..controller \group.edit, <[$scope $http resInit urlpatterns sel2]> ++ ($scope, $http, resInit, urlpatterns, sel2) ->
     console.log sel2
-    $(\#user-chooser)select2 sel2.user
-    $(\#group-chooser)select2 sel2.group
+    $(\#member-chooser)select2 sel2.user
+    $(\#staff-chooser)select2 sel2.user
     # TODO use ui-select or sth like that for better data binding
-    $(\#user-chooser).on \change -> $scope.group.user = $(\#user-chooser)val!split \,
-    $(\#group-chooser).on \change -> $scope.group.group = $(\#group-chooser)val!split \,
+    $(\#member-chooser).on \change -> $scope.group.member = $(\#member-chooser)val!split(\,)map(->id:it)
+    $(\#staff-chooser).on \change -> $scope.group.staff = $(\#staff-chooser)val!split(\,)map(->id:it)
     $scope.group = {}
     $scope.create = ->
+      console.log ">>>", $scope.group
       $http do
         url: urlpatterns.api_create_group()
         method: \POST

@@ -8,9 +8,6 @@ x$.provider('resInit', function(){
     return this$.resource;
   };
 });
-x$.factory('blah', function(resInit){
-  return console.log('ok');
-});
 x$.directive('ldstate', ['$timeout'].concat(function($timeout){
   return {
     require: 'ngModel',

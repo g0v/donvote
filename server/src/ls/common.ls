@@ -4,9 +4,6 @@ angular.module \django.common, <[]>
     @resource = {}
     @["$get"] = ~> @resource
 
-  ..factory \blah, (resInit) -> do
-    console.log \ok
-
   ..directive \ldstate, <[$timeout]> ++ ($timeout) -> do
     require: \ngModel
     restrict: \E

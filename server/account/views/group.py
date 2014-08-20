@@ -8,8 +8,9 @@ from addon.permissions import IsOwnerOrReadOnly
 from addon.views import SubView
 from vote.views import DiscussList, VoteList
 from vote import views as VoteViews
+from django.http import Http404
 
-class List(generics.ListCreateAPIView):
+class ListAPI(generics.ListCreateAPIView):
   permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
   queryset = WorkGroup.objects.all()
   serializer_class = WorkGroupSerializer
@@ -18,7 +19,6 @@ class List(generics.ListCreateAPIView):
   def get_queryset(self):
     name = self.request.QUERY_PARAMS.get("name",None)
     if name:
-      ret =  WorkGroup.objects.filter(name__icontains=name)
       return WorkGroup.objects.filter(name__icontains=name)
     else:
       return WorkGroup.objects.all()
@@ -26,13 +26,22 @@ class List(generics.ListCreateAPIView):
   def pre_save(self, obj):
     obj.owner = self.request.user
 
-class Detail(generics.RetrieveUpdateDestroyAPIView):
+class DetailAPI(generics.RetrieveUpdateDestroyAPIView):
   permission_classes = (permissions.IsAuthenticatedOrReadOnly,IsOwnerOrReadOnly,)
   queryset = WorkGroup.objects.all()
   serializer_class = WorkGroupSerializer
 
-class Edit(TemplateView):
+class EditView(TemplateView):
   template_name = "group/edit.jade"
+
+class DetailView(TemplateView):
+  template_name = "group/detail.jade"
+  def get_context_data(self, **kwargs):
+    context = super(DetailView, self).get_context_data(**kwargs)
+    try: group = WorkGroup.objects.get(id=kwargs["id"])
+    except: raise Http404()
+    context["resInit"] = [{"name": "group", "obj": group, "serializer": WorkGroupSerializer}]
+    return context
 
 class WorkGroupDetailView(TemplateView):
   template_name = "group/detail.jade"

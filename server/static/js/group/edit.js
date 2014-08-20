@@ -20,10 +20,11 @@ x$.factory('sel2', function(urlpatterns){
           };
         },
         results: function(data, page){
+          console.log(">>>", data);
           data.results = data.results.map(function(it){
             return {
               id: it.id,
-              text: it.username
+              text: it.owner.username
             };
           });
           return {
@@ -66,16 +67,25 @@ x$.factory('sel2', function(urlpatterns){
 });
 x$.controller('group.edit', ['$scope', '$http', 'resInit', 'urlpatterns', 'sel2'].concat(function($scope, $http, resInit, urlpatterns, sel2){
   console.log(sel2);
-  $('#user-chooser').select2(sel2.user);
-  $('#group-chooser').select2(sel2.group);
-  $('#user-chooser').on('change', function(){
-    return $scope.group.user = $('#user-chooser').val().split(',');
+  $('#member-chooser').select2(sel2.user);
+  $('#staff-chooser').select2(sel2.user);
+  $('#member-chooser').on('change', function(){
+    return $scope.group.member = $('#member-chooser').val().split(',').map(function(it){
+      return {
+        id: it
+      };
+    });
   });
-  $('#group-chooser').on('change', function(){
-    return $scope.group.group = $('#group-chooser').val().split(',');
+  $('#staff-chooser').on('change', function(){
+    return $scope.group.staff = $('#staff-chooser').val().split(',').map(function(it){
+      return {
+        id: it
+      };
+    });
   });
   $scope.group = {};
   return $scope.create = function(){
+    console.log(">>>", $scope.group);
     return $http({
       url: urlpatterns.api_create_group(),
       method: 'POST',

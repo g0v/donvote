@@ -11,14 +11,16 @@ class NameList(models.Model):
   user = models.ManyToManyField(User, related_name="inlist")
 
 class WorkGroup(models.Model):
+  owner = models.ForeignKey('auth.User', related_name="owngroup")
   name = models.CharField(max_length = "100", blank=False)
   desc = models.TextField(blank=True)
   avatar = models.ImageField(upload_to='avatar/g/')
-  dep = models.ManyToManyField('self')
+  dept = models.ManyToManyField('self',blank=True)
   karma = models.ManyToManyField(Karma,blank=True)
   discuss = models.ManyToManyField(Discuss,blank=True)
   vote = models.ManyToManyField(Vote, blank=True)
-  members = models.ForeignKey(NameList, related_name = "workgroup", blank=True)
+  staff = models.ManyToManyField(User, blank=True, related_name="staff")
+  member = models.ManyToManyField(User, blank=True, related_name="member")
   def __unicode__(self):
     return "Group: " + self.name
 

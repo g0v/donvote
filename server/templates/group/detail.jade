@@ -2,24 +2,27 @@
 {% load addon %}
 {% load staticfiles %}
 {% block 'content' %}
+{% resInitAll %}
+{% urlpatterns %}
+script(type="text/javascript",src="/s/js/group/detail.js")
+#group-detail(ng-controller="group.detail")
+  h3 {{'group.name'|aj}}
+  p {{'group.desc'|aj}}
+  h4 成員
+  div(ng-repeat="u in group.member") {{'u'|aj}}
 
-h3 {{group.name}}
-p {{group.desc}}
-h4 成員
-{% for member in group.members.user.all %}
-{{ member.username }}
-{% endfor %}
+  h4 投票案
+  div(ng-repeat="v in group.vote") {{'v'|aj}}
+  {% for vote in group.vote.all %}
+  a(href="/vote/{{vote.id}}/") {{ vote.name }}
+  {% endfor %}
+  a(href="/group/{{'group.id'|aj}}/vote/new") 新增投票案
+  a(href="{{'urlpatterns.new_vote_of_group(group.id)'|aj}}") 新增投票案
 
-h4 投票案
-{% for vote in group.vote.all %}
-a(href="/vote/{{vote.pk}}/") {{ vote.name }}
-{% endfor %}
-a(href="/group/{{group.pk}}/vote/new") 新增投票案
+  br
+  br
 
-br
-br
-
-{% with item=group %}
-{% include 'discuss/list.jade' %}
-{% endwith %}
+  {% with item=group %}
+  {% include 'discuss/list.jade' %}
+  {% endwith %}
 {% endblock %}

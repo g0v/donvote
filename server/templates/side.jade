@@ -20,12 +20,10 @@
     li.list-group-item
       i.glyphicon
       |  零時政府
-    {% for namelist in request.user.inlist.all %}
-    {% for group in namelist.workgroup.all %}
+    {% for group in request.user.member.all %}
     li.list-group-item: a(href="/group/{{group.pk}}/")
       i.glyphicon.glyphicon-fire
       |  {{ group.name }}
-    {% endfor %}
     {% endfor %}
   h5 熱門社群
   ul.list-group

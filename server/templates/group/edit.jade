@@ -16,40 +16,10 @@ script(type="text/javascript",src="/s/js/group/edit.js")
       textarea.form-control(type="text",ng-model="group.desc",placeholder="請于此詳細描述這個群組")
     .form-group
       label 加入成員
-      input#user-chooser.form-control(type="hidden",multiple,ng-model="group.member")
+      input#member-chooser.form-control(type="hidden",multiple)
     .form-group
-      label ..加入整個群組
-      input#group-chooser.form-control(type="hidden",multiple,ng-model="group.group")
-      script.
-        /*
-        var list = [];
-        for(var i=0;i<100;i++) { list.push(""+parseInt(Math.random()*100000)); }
-        configUser = {
-          placeholder:'選擇人或群組..',
-          minimumInputLength: 1,
-          multiple: true,
-          ajax: {
-            url: "http://localhost:8002/api/user/",
-            dataType: "json",
-            quietMillis: 100,
-            data: function(term, page) {
-              return {
-                username: term,
-                page_limit: 5,
-                page: page
-              };
-            },
-            results: function(data, page) {
-              data.results = data.results.map(function(it) { return {id: it.id, text: it.username};});
-              return {results: data.results, more: page * 5 < data.count};
-            }
-          }
-        };
-        configGroup = configUser
-
-        $("#e1").select2(config);
-        $("#e2").select2(config);
-        */
+      label 指派管理員
+      input#staff-chooser.form-control(type="hidden",multiple)
     hr
     .btn.btn-primary.btn-block.btn-lg(ng-click="create()") 建立群組
 {% endblock %}

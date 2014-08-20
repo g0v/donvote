@@ -38,7 +38,8 @@ d1.save()
 n = NameList.objects.create(name="組名單",owner=admin)
 n.user.add(admin)
 n.save()
-w = WorkGroup.objects.create(name="測試組",desc="這是一個測試用的群組",members=n)
+w = WorkGroup.objects.create(name="測試組",desc="這是一個測試用的群組",owner=admin)
+w.staff.add(admin)
 d2 = w.discuss.create(content="測試群組中的一個測試留言", owner=admin)
 d2.save()
 w.vote.add(vote)
@@ -47,3 +48,18 @@ w.save()
 adminProfile = admin.profile
 tkirby = User.objects.create(username="tkirby")
 tkirbyProfile = tkirby.profile
+
+user = User.objects.create(username="John")
+userprofile = user.profile
+user.save()
+userprofile.save()
+
+user = User.objects.create(username="Edward")
+userprofile = user.profile
+user.save()
+userprofile.save()
+
+user = User.objects.create(username="Alphonse")
+userprofile = user.profile
+user.save()
+userprofile.save()

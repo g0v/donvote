@@ -4,7 +4,7 @@ from ..models import UserProfile
 from ..serializers import UserProfileSerializer
 from addon.permissions import IsOwnerOrReadOnly
 
-class List(generics.ListCreateAPIView):
+class ListAPI(generics.ListCreateAPIView):
   permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
   queryset = UserProfile.objects.all()
   serializer_class = UserProfileSerializer
@@ -20,7 +20,7 @@ class List(generics.ListCreateAPIView):
   def pre_save(self, obj):
     obj.owner = self.request.user
 
-class Detail(generics.RetrieveUpdateDestroyAPIView):
+class DetailAPI(generics.RetrieveUpdateDestroyAPIView):
   permission_classes = (permissions.IsAuthenticatedOrReadOnly,IsOwnerOrReadOnly,)
   queryset = UserProfile.objects.all()
   serializer_class = UserProfileSerializer

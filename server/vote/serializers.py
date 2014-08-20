@@ -1,6 +1,8 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User
 from .models import Vote, Plan, Discuss, Karma, Ballot
+from addon.serializers import DetailRelatedField, WritableDetailRelatedField, CountRelatedField
+from django.core.exceptions import ObjectDoesNotExist, ValidationError
 import json
 
 class PlanField(serializers.RelatedField):
@@ -16,18 +18,17 @@ class PlanField(serializers.RelatedField):
     plan.object.save()
     return plan.object
 
-class DiscussField(serializers.RelatedField):
-  read_only = False
-  def to_native(self, value):
-    return {"id": value.pk, "content": value.content}
-  def from_native(self, data):
-    d = Discuss.objects.filter(pk=data.get("id") or -1)
-    if len(d) > 0: return d[0]
-    discuss = DiscussSerializer(data=data)
-    if not discuss.is_valid(): return None
-    discuss.object.owner = self.context["request"].user
-    discuss.object.save()
-    return discuss.object
+class DiscussSerializer(serializers.ModelSerializer):
+  owner = serializers.Field(source='owner.username')
+  createDate = serializers.DateTimeField(format='iso-8601')
+  modifyDate = serializers.DateTimeField(format='iso-8601')
+  class Meta:
+    model = Discuss
+    field = (  'owner', 'karma', 'createDate', 'modifyDate', 'content', 'tendency'  )
+
+class DiscussField(DetailRelatedField):
+  serializer = DiscussSerializer
+  pass
 
 class PlanSerializer(serializers.ModelSerializer):
   owner = serializers.Field(source='owner.username')
@@ -41,11 +42,8 @@ class KarmaSerializer(serializers.ModelSerializer):
     model = Karma
     field = (  'value'  )
 
-class DiscussSerializer(serializers.ModelSerializer):
-  owner = serializers.Field(source='owner.username')
-  class Meta:
-    model = Discuss
-    field = (  'owner', 'karma', 'createDate', 'modifyDate', 'content', 'tendency'  )
+class KarmaField(CountRelatedField):
+  pass
 
 class BallotSerializer(serializers.ModelSerializer):
   owner = serializers.Field(source='owner.username')
@@ -55,6 +53,13 @@ class BallotSerializer(serializers.ModelSerializer):
     model = Ballot
     field = ( 'owner', 'plan', 'vote', 'createDate', 'modifyDate' )
 
+class SimpleVoteSerializer(serializers.ModelSerializer):
+  owner = serializers.Field(source='owner.username')
+  plan = PlanField(many=True)
+  class Meta:
+    model = Vote
+    fields = ('id', 'owner', 'name', 'plan')
+
 class VoteSerializer(serializers.ModelSerializer):
   owner = serializers.Field(source='owner.username')
   plan = PlanField(many=True)
@@ -63,34 +68,38 @@ class VoteSerializer(serializers.ModelSerializer):
 
   class Meta:
     model = Vote
-    field = ( 
-      # generic
-      'owner', 'karma', 'discuss', 'name', 'desc', 'plan', 'ongoing', 
-      'createDate', 'modifyDate',
-      # start date
-      'startMethod', 'startDate', 
-        'needPlan', 'planCount', 
-        'needKarma', 'karmaRate', 'karmaCount',
-        'needQuality', 'qualifiedRate',
-        'needAgree', 'agreeRate',
-        'needAnwser', 'answerRate',
-        'needStartCountDown', 'startCountDown',
-      # end date
-      'endMethod', 'endByDuration', 'endDate', 'duration',
-        'needVote', 'voteRate',
-        'needEndCountDown', 'endCountDown',
-      # vote approach
-      'voteMethod', 'maxChoiceCount', 'rankMethod'
-
-      # cowork option
-      'mute', 'noKarma', 'allowFork', 'allowNewPlan',
-
-      # vote option
-      'noProxy', 'disclosedBallot', 'allowAnonymous'
-      
-      # validation
-      'allowNullTicket', 'useNullTicketRate', 'nullTicketRate',
-      'useValidVoteRate', 'validVoteRate',
-      'useObtainRate', 'obtainRate',
-    )
+#    field = ( 
+#      # generic
+#      'owner', 'karma', 'discuss', 'name', 'desc', 'plan', 'ongoing', 
+#      'createDate', 'modifyDate',
+#      # start date
+#      'startMethod', 'startDate', 
+#        'needPlan', 'planCount', 
+#        'needKarma', 'karmaRate', 'karmaCount',
+#        'needQuality', 'qualifiedRate',
+#        'needAgree', 'agreeRate',
+#        'needAnwser', 'answerRate',
+#        'needStartCountDown', 'startCountDown',
+#      # end date
+#      'endMethod', 'endByDuration', 'endDate', 'duration',
+#        'needVote', 'voteRate',
+#        'needEndCountDown', 'endCountDown',
+#      # vote approach
+#      'voteMethod', 'maxChoiceCount', 'rankMethod'
+#
+#      # cowork option
+#      'mute', 'noKarma', 'allowFork', 'allowNewPlan',
+#
+#      # vote option
+#      'noProxy', 'disclosedBallot', 'allowAnonymous'
+#      
+#      # validation
+#      'allowNullTicket', 'useNullTicketRate', 'nullTicketRate',
+#      'useValidVoteRate', 'validVoteRate',
+#      'useObtainRate', 'obtainRate',
+#    )
     depth = 1
+
+class VoteField(DetailRelatedField):
+  serializer = SimpleVoteSerializer
+  read_only = False

@@ -1,7 +1,7 @@
 from django import template
 from rest_framework.renderers import JSONRenderer
 from django.core.urlresolvers import reverse
-import importlib
+import importlib, string
 
 register = template.Library()
 
@@ -19,8 +19,6 @@ def aj(value):
 
 @register.filter
 def dumps(value,arg):
-  print(arg)
-  print(type(value))
   v = VoteSerializer(value)
   v.is_valid()
   return JSONRenderer().render(v.data)
@@ -45,7 +43,6 @@ class resInitNode(template.Node):
       for n in names[1:]: value = getattr(value, n)
       v = self.serializer(value)
     except:
-      print("no no "+self.args[1])
       return ""
 
     return ( "<script type='text/javascript'>angular.module('django.common')" +
@@ -70,3 +67,26 @@ def resInit(parser, token):
       cache[name] = -1
       return commentNode("%s not found"%name)
   return resInitNode(serializer, args)
+
+class resInitAllNode(template.Node):
+  def render(self, context):
+    
+    core = []
+    for item in context["resInit"]:
+      name = item["name"]
+      data = JSONRenderer().render(item["serializer"](item["obj"]).data)
+      core = core + ["  res['%s'] = %s;"%(name, data)]
+
+    core = [
+      "<script type='text/javascript'>angular.module('django.common')",
+      ".config(function(resInitProvider) {",
+      "  res = resInitProvider.$get();"
+    ] + core + [
+      "});</script>"
+    ]
+    return string.join(core, "\n")
+
+
+@register.tag
+def resInitAll(parser, token):
+  return resInitAllNode()
