@@ -216,8 +216,7 @@ update-file = ->
   if type == \other => return
   if type == \ls => cmd = "#{ls} -cb #{it}"
   if type == \sass => cmd = "#{sass} #{it} #{it.replace /\.sass$/, \.css}"
-  if type == \jade and it.indexOf(\simple/)==0 => cmd = "#{jade} -P simple.jade"
-  else if type == \jade => cmd = "#{jade} -P #{it}"
+  if type == \jade => cmd = "#{jade} -P index.jade"
   if cmd =>
     console.log "[BUILD] #{cmd}"
     child_process.exec cmd, log
@@ -226,6 +225,6 @@ watcher = chokidar.watch watch-path, ignored: ignore-func, persistent: true
   .on \add, update-file
   .on \change, update-file
 
-http.createServer server .listen 9999, \0.0.0.0
+http.createServer server .listen 8002, \0.0.0.0
 
-console.log "running server on 0.0.0.0:9999"
+console.log "running server on 0.0.0.0:8002"
