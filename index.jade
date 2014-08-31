@@ -8,35 +8,55 @@ doctype html
 html(lang="en")
   head(prefix="og: http://ogp.me/ns#")
     meta(charset="utf-8")
-    title 動民主0.5
+    title template
     // libraries
     include library.jade
     // custom files
-    link(rel="stylesheet",type="text/css",href="#{assets}/bootstrap/3.0.2/theme/bootstrap.cosmo.min.css")
-    link(rel="stylesheet",type="text/css",href="datetimepicker.css")
     link(rel="stylesheet",type="text/css",href="index.css")
-    script(type="text/javascript",src='//cdn.firebase.com/v0/firebase.js')
-    script(type="text/javascript",src="//cdn.firebase.com/v0/firebase-simple-login.js")
-    script(type="text/javascript",src="//cdn.firebase.com/libs/angularfire/0.5.0/angularfire.min.js")
-    script(type="text/javascript",src="moment.min.js")
-    script(type="text/javascript",src="datetimepicker.js")
-    script(type="text/javascript",src="core.js")
+    link(rel="stylesheet",type="text/css",href="assets/fontawesome/css/font-awesome.min.css")
+    script(type="text/javascript",src="//cdn.firebase.com/js/client/1.0.21/firebase.js")
+    script(type="text/javascript",src="//cdn.firebase.com/js/simple-login/1.6.3/firebase-simple-login.js")
+    script(type="text/javascript",src="//cdn.firebase.com/libs/angularfire/0.8.2/angularfire.min.js")
     script(type="text/javascript",src="index.js")
-  body(ng-app="simple",ng-controller="ctrl.main"): div(ng-controller="ctrl.simplebase")
-    .navbar.navbar-default.navbar-fixed-top(role="navigation")
-      .ib
+    script(type="text/javascript",src="render.js")
+  body(ng-app="main",ng-controller="main")
+    .navbr.navbar-default.navbar-fixed-top
+      .container-fluid
         .navbar-header
-          a.navbar-brand(href="#") 動民主0.5
-        ul.nav.navbar-nav
-          li(ng-class="active(tab, 1)",ng-show="user.username=='zbryikt' || user.username=='ETBlue'"): a(href="#",ng-click="tab=1") 發起新提案
-          li(ng-class="active(tab, 2)",ng-show="user.username=='zbryikt' || user.username=='ETBlue'"): a(href="#",ng-click="tab=2") 提案列表
-          li(ng-class="active(tab, 3)",ng-show="propCur.name"): a(href="#",ng-click="tab=3") {{propCur.name}}
-        ul.nav.navbar-nav.navbar-right(ng-controller="ctrl.user")
-          li: a(href="#",ng-show="!user",ng-click="login()") 登入
-          li: a(href="#",ng-show="user") {{user.username}}
-          li: a(href="#",ng-show="user",ng-click="logout()") 登出
+          a.navbar-brand(href="#") 動民主 0.49
+        .collapse.navbar-collapse
+          ul.nav.navbar-nav
+            li(ng-show="!user"): a(href="#",data-toggle="modal",data-target="#login-modal") 登入
+            li(ng-show="user"): a(href="#") {{user.email}}
+            li(ng-show="user && user.email=='tkirby@gmail.com'"): a(href="#",data-toggle="modal",data-target="#vote-modal") 編輯投票案
+            li: a(href="#",ng-click="slideshow()") 檢視模式
+            li(ng-show="user"): a(href="#",ng-click="logout()") 登出
+    include login.jade
+    include vote.jade
     #content
-      include module/new.jade
-      include module/list.jade
-      include module/current.jade
-    #foot
+      svg#svg(viewBox="0 0 800 600",preserveAspectRatio="xMidYMid")
+      .text-center
+        h2
+          | {{mvote.obj.name}}
+          |  
+          small: small 每人 {{mvote.obj.maxvote}} 票
+        p {{mvote.obj.desc}}
+
+      hr
+      .row
+        .col-sm-4
+          h3.text-center 所有選項
+          .list-group
+            a.list-group-item(href="#",ng-repeat="plan in mvote.obj.plans",ng-click="mvote.toggle(plan)")
+              | {{plan.name}}
+        .col-sm-4
+          h3.text-center 你的選擇
+          .list-group
+            a.list-group-item.list-group-item-success(href="#",ng-repeat="b in mvote.ballot")
+              | {{mvote.planById(b)}}
+        .col-sm-4
+          h3.text-center 大家的選擇
+          .list-group
+            a.list-group-item.list-group-item-success(href="#",ng-repeat="plan in mvote.obj.plans")
+              span.badge {{mvote.planCount(plan)}}
+              | {{plan.name}}
