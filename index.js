@@ -63,9 +63,12 @@ x$.controller('main', ['$scope', '$firebase', 'render'].concat(function($scope, 
         return ret[0].name;
       }
     },
+    setReadOnly: function(v){
+      return this.readonly = v;
+    },
     toggle: function(plan){
       var planid, ret, this$ = this;
-      if (!this.id) {
+      if (!this.id || this.readonly) {
         return;
       }
       if (!$scope.user) {
@@ -93,7 +96,7 @@ x$.controller('main', ['$scope', '$firebase', 'render'].concat(function($scope, 
     add: function(){
       var db, payload, ref$;
       db = $firebase(new Firebase("https://donmockup.firebaseio.com/vote"));
-      payload = (ref$ = {}, ref$.name = this.name, ref$.desc = this.desc, ref$.plans = this.plans, ref$);
+      payload = (ref$ = {}, ref$.name = this.name, ref$.desc = this.desc, ref$.maxvote = this.maxvote, ref$.plans = this.plans, ref$.readonly = this.readonly, ref$);
       return db.$add(payload);
     },
     load: function(id){
@@ -103,7 +106,7 @@ x$.controller('main', ['$scope', '$firebase', 'render'].concat(function($scope, 
       obj.$loaded().then(function(){
         var ref$;
         this$.obj = obj;
-        return this$.name = (ref$ = this$.obj).name, this$.desc = ref$.desc, this$.maxvote = ref$.maxvote, this$.plans = ref$.plans, this$;
+        return this$.name = (ref$ = this$.obj).name, this$.desc = ref$.desc, this$.maxvote = ref$.maxvote, this$.plans = ref$.plans, this$.readonly = ref$.readonly, this$;
       });
       alltix = $firebase(new Firebase("https://donmockup.firebaseio.com/vote/" + id + "/tix")).$asObject();
       return alltix.$loaded().then(function(){
@@ -129,12 +132,14 @@ x$.controller('main', ['$scope', '$firebase', 'render'].concat(function($scope, 
     },
     save: function(){
       var ref$;
+      $('#vote-modal').modal('hide');
       if (this.obj) {
         ref$ = this.obj;
         ref$.name = this.name;
         ref$.desc = this.desc;
         ref$.maxvote = this.maxvote;
         ref$.plans = this.plans;
+        ref$.readonly = this.readonly;
         return this.obj.$save();
       }
       if (!this.name) {

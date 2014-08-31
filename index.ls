@@ -38,8 +38,9 @@ angular.module \main, <[firebase]>
         ret = @plans.filter(-> it.id == id)
         if ret.length => return ret.0.name
 
+      setReadOnly: (v) -> @readonly = v
       toggle: (plan) ->
-        if !@id => return
+        if !@id or @readonly => return
         if !$scope.user => return
         planid = @plans.map -> it.id
         @metix.forEach ~> if not (it.$value in planid) => @metix.$remove it
@@ -49,7 +50,7 @@ angular.module \main, <[firebase]>
 
       add: ->
         db = $firebase(new Firebase "https://donmockup.firebaseio.com/vote")
-        payload = {} <<< @{name,desc,plans}
+        payload = {} <<< @{name, desc, maxvote, plans, readonly}
         db.$add payload
 
       load: (id) ->
@@ -57,7 +58,7 @@ angular.module \main, <[firebase]>
         obj = $firebase(new Firebase "https://donmockup.firebaseio.com/vote/#id")$asObject!
         obj.$loaded!then ~>
           @obj = obj
-          @ <<< @obj{name, desc, maxvote, plans}
+          @ <<< @obj{name, desc, maxvote, plans, readonly}
         alltix = $firebase(new Firebase "https://donmockup.firebaseio.com/vote/#id/tix")$asObject!
         alltix.$loaded!then ~>
           @alltix = alltix
@@ -71,8 +72,9 @@ angular.module \main, <[firebase]>
           @alltix.$watch update
 
       save: ->
+        $(\#vote-modal).modal(\hide)
         if @obj => 
-          @obj <<< @{name, desc, maxvote, plans}
+          @obj <<< @{name, desc, maxvote, plans, readonly}
           return @obj.$save!
         if !(@name) => return
         if !@obj => @add!
