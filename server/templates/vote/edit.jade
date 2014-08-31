@@ -2,7 +2,9 @@
 {% load addon %}
 {% load staticfiles %}
 {% block 'content' %}
-script.
+{% resInitAll %}
+{% urlpatterns %}
+//-script.
   {% if vote %}
   var voteid = {{vote.pk}};
   {% endif %}

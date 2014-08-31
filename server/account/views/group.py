@@ -67,7 +67,9 @@ class VoteList(VoteViews.VoteList):
 class NewVote(TemplateView):
   template_name = "vote/edit.jade"
   def get_context_data(self, **kwargs):
-    context = super(WorkGroupNewVoteView, self).get_context_data(**kwargs)
-    context["ownerapi"] = reverse("group_vote_api", kwargs={"vote_owner_pk": kwargs["vote_owner_pk"]})
+    context = super(NewVote, self).get_context_data(**kwargs)
+    try: group = WorkGroup.objects.get(id=kwargs['id'])
+    except: raise Http404()
+    context["resInit"] = [{"name": "group", "obj": group, "serializer": WorkGroupSerializer}]
     return context
 

@@ -1,5 +1,8 @@
 progress
   add group. working on "new vote under group"
     try to generalize newvote.ls so it can create vote under other node, such as group
+
   working on "create new group"
     need find a better way about group and namelist
+
+  create member list while create grop

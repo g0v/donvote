@@ -1,5 +1,5 @@
 angular.module \donvote
-  ..controller \newvote, ($scope, $timeout, $http) ->
+  ..controller \newvote, ($scope, $timeout, $http, resInit, urlpatterns) ->
     $scope.clean = ->
       $scope.plan = do
         name: ""
@@ -93,10 +93,8 @@ angular.module \donvote
       .error (e) -> console.error e
     $scope.newvote = (v) ->
       $scope.state = 2
-      url = if ownerapi? => ownerapi else \/api/vote/
-      console.log url
       $http do
-        url: url
+        url: $scope.createapi
         method: \POST
         data: JSON.stringify($scope.vote)
       .success (d) ->
@@ -106,6 +104,9 @@ angular.module \donvote
           $timeout ( -> $scope.state = 1 ), 4000
         ), 2000
       .error (e) -> console.error e
+    $scope.createapi = \/api/vote/
+    if resInit.group => $scope.createapi = urlpatterns.api_group_add_vote(resInit.group.id)
+
     if voteid? =>
       $timeout ->
         $http do

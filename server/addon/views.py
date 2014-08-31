@@ -8,15 +8,15 @@ def SubView(o_class):
 
   # need to check if obj exists
   def get_queryset(self):
-    obj = self.root_class.objects.filter(pk=self.kwargs[self.target_field+"_owner_pk"])
+    obj = self.root_class.objects.filter(id=self.kwargs[self.target_field+"_owner_id"])
     if len(obj): return obj[0].__getattribute__(self.target_field).all()
     else: return []
   def pre_delete(self, obj):
-    obj = self.root_class.objects.filter(pk=self.kwargs[self.target_field+"_owner_pk"])
+    obj = self.root_class.objects.filter(id=self.kwargs[self.target_field+"_owner_id"])
     if len(obj): obj[0].__getattribute__(self.target_field).remove(obj)
     super(o_class, self).pre_delete(obj)
   def post_save(self, obj, created=False):
-    v = self.root_class.objects.filter(pk=self.kwargs[self.target_field+"_owner_pk"])
+    v = self.root_class.objects.filter(id=self.kwargs[self.target_field+"_owner_id"])
     if len(v): v[0].__getattribute__(self.target_field).add(obj)
     super(o_class, self).post_save(obj)
 
