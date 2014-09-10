@@ -82,38 +82,55 @@
             <h4 class="modal-title">編輯投票案</h4>
           </div>
           <div class="modal-body text-center">
-            <form class="form-horizontal">
+            <form class="form-horizontal ng-pristine ng-valid">
               <div class="form-group">
                 <label class="col-sm-2 control-label">投票名稱</label>
                 <div class="col-sm-9">
-                  <input type="text" ng-model="mvote.name" class="form-control">
+                  <input type="text" ng-model="mvote.name" class="form-control ng-pristine ng-valid">
                 </div>
               </div>
               <div class="form-group">
                 <label class="col-sm-2 control-label">投票描述</label>
                 <div class="col-sm-9">
-                  <input type="text" ng-model="mvote.desc" class="form-control">
+                  <input type="text" ng-model="mvote.desc" class="form-control ng-pristine ng-valid">
                 </div>
               </div>
               <div class="form-group">
                 <label class="col-sm-2 control-label">最多票數</label>
                 <div class="col-sm-9">
-                  <input type="text" ng-model="mvote.maxvote" class="form-control">
+                  <input type="text" ng-model="mvote.maxvote" class="form-control ng-pristine ng-valid">
                 </div>
               </div>
-            </form>
-            <h3>選項列表</h3>
-            <h1 ng-repeat="plan in mvote.plans" class="label label-info">{{plan.name}} <i ng-click="mvote.delplan(plan)" class="glyphicon glyphicon-remove"></i></h1>
-            <hr>
-            <h4>增加選項</h4>
-            <form class="form-horizontal">
               <div class="form-group">
-                <label class="col-sm-2 control-label">選項名稱</label>
-                <div class="col-sm-9">
-                  <input type="text" ng-model="mvote.newplanname" class="form-control">
+                <label class="col-sm-2 control-label">投票唯讀</label>
+                <div class="col-sm-4 text-left">
+                  <div class="btn-group">
+                    <div ng-class="{'active':mvote.readonly}" ng-click="mvote.setReadOnly(true)" class="btn btn-warning active">ON</div>
+                    <div ng-class="{'active':!mvote.readonly}" ng-click="mvote.setReadOnly(false)" class="btn btn-warning">OFF</div>
+                  </div>
+                </div>
+                <label class="col-sm-2 control-label">刪除投票</label>
+                <div class="col-sm-4 text-left">
+                  <div class="btn-group">
+                    <div ng-click="mvote.remove()" class="btn btn-danger">是的，我要刪除</div>
+                  </div>
                 </div>
               </div>
-              <div ng-click="mvote.newplan()" class="btn btn-primary">增加</div>
+              <div class="form-group">
+                <label class="col-sm-2 control-label">選項列表</label>
+                <div class="col-sm-9 planlist">
+                  <h1 ng-repeat="plan in mvote.plans" class="label label-info">{{plan.name}} <i ng-click="mvote.delplan(plan)" class="glyphicon glyphicon-remove"></i></h1>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="col-sm-2 control-label">增加選項</label>
+                <div class="col-sm-7">
+                  <input type="text" ng-model="mvote.newplanname" class="form-control ng-pristine ng-valid">
+                </div>
+                <div class="col-sm-2">
+                  <div ng-click="mvote.newplan()" class="btn btn-primary">增加</div>
+                </div>
+              </div>
             </form>
           </div>
           <div class="modal-footer">
