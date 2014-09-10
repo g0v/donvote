@@ -58,10 +58,9 @@ x$.controller('main', ['$scope', '$firebase', '$timeout', '$location', '$http', 
     });
   };
   $scope.fblogin = function(){
-    return FB.login(function(){
-      return getAccessToken();
-    }, {
-      scope: "read_stream,email"
+    return $scope.auth.login('facebook', {
+      rememberMe: true,
+      scope: 'email'
     });
   };
   $scope.login = function(){

@@ -31,9 +31,10 @@ angular.module \main, <[firebase]>
         else => console.log "please login"
 
     $scope.fblogin = ->
-      FB.login (->
-        get-access-token!
-      ), {scope: "read_stream,email"}
+      $scope.auth.login \facebook, rememberMe: true, scope: 'email'
+      #FB.login (->
+      #  get-access-token!
+      #), {scope: "read_stream,email"}
     $scope.login = ->
       if !$scope.user =>
         $scope.auth.createUser $scope.mlogin.email, $scope.mlogin.password, (e,u) ->

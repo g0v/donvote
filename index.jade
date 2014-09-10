@@ -13,7 +13,7 @@ html(lang="en")
     include library.jade
     // custom files
     link(rel="stylesheet",type="text/css",href="index.css")
-    link(rel="stylesheet",type="text/css",href="assets/fontawesome/css/font-awesome.min.css")
+    link(rel="stylesheet",type="text/css",href="assets/fontawesomes/css/font-awesome.min.css")
     script(type="text/javascript",src="//cdn.firebase.com/js/client/1.0.21/firebase.js")
     script(type="text/javascript",src="//cdn.firebase.com/js/simple-login/1.6.3/firebase-simple-login.js")
     script(type="text/javascript",src="//cdn.firebase.com/libs/angularfire/0.8.2/angularfire.min.js")
@@ -27,7 +27,7 @@ html(lang="en")
         .collapse.navbar-collapse
           ul.nav.navbar-nav
             li(ng-show="!user"): a(data-toggle="modal",data-target="#login-modal") 登入
-            li(ng-show="user"): a {{user.email}}
+            li(ng-show="user"): a {{user.displayName}}
             li(ng-show="user && user.uid==mvote.uid"): a(data-toggle="modal",data-target="#vote-modal") 編輯投票案
             li.dropdown
               a.dropdown-toggle(data-toggle="dropdown")
