@@ -297,15 +297,7 @@ x$.controller('main', ['$scope', '$firebase', '$timeout', '$location', '$http', 
       });
     }
   };
-  $scope.votelist.init();
-  FB.init({
-    appId: '836557763029341',
-    status: true,
-    cookie: true,
-    xfbml: true,
-    oauth: true
-  });
-  return getAccessToken();
+  return $scope.votelist.init();
 }));
 function import$(obj, src){
   var own = {}.hasOwnProperty;

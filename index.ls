@@ -31,11 +31,7 @@ angular.module \main, <[firebase]>
             $scope.mlogin.dismiss!
         else => console.log "please login"
 
-    $scope.fblogin = ->
-      $scope.auth.login \facebook, rememberMe: true, scope: 'email'
-      #FB.login (->
-      #  get-access-token!
-      #), {scope: "read_stream,email"}
+    $scope.fblogin = -> $scope.auth.login \facebook, rememberMe: true, scope: 'email'
     $scope.login = ->
       if !$scope.user =>
         $scope.auth.createUser $scope.mlogin.email, $scope.mlogin.password, (e,u) ->
@@ -162,11 +158,3 @@ angular.module \main, <[firebase]>
           else id = $location.hash!
           $scope.mvote.load id
     $scope.votelist.init!
-    FB.init do
-      appId: \836557763029341
-      status: true
-      cookie: true
-      xfbml: true
-      oauth: true
-
-    get-access-token!
