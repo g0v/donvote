@@ -16,6 +16,7 @@ x$.controller('main', ['$scope', '$firebase', '$timeout', '$location', '$http', 
   $scope.auth = new FirebaseSimpleLogin(new Firebase("https://donmockup.firebaseio.com/"), function(e, u){
     return $scope.$apply(function(){
       console.log("user login:", u);
+      $scope.mlogin.dismiss();
       if (e) {
         return console.log("get user fail: ", e);
       }

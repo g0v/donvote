@@ -9,6 +9,7 @@ angular.module \main, <[firebase]>
 
     $scope.auth = new FirebaseSimpleLogin new Firebase("https://donmockup.firebaseio.com/"), (e, u) -> $scope.$apply ->
       console.log "user login:" ,u
+      $scope.mlogin.dismiss!
       if e => return console.log "get user fail: ", e
       $scope.user = u
 
